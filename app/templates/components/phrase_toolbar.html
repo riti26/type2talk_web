@@ -1,0 +1,8 @@
+<nav>
+    <span>Hello, {{ phrase_toolbar.user.username }}</span>
+    <a href="{{ url_for('main.home') }}">Home</a>
+    <a href="{{ url_for('main.communication_items') }}">
+        Communication Items{% if phrase_toolbar.unread_count > 0 %} ({{ phrase_toolbar.unread_count }}){% endif %}
+    </a>
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+</nav>

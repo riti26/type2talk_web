@@ -1,0 +1,55 @@
+from threading import Thread
+from flask import Flask
+
+from app.ui.main_toolbar import MainToolbar
+from app.utils.add_data_manager import AppDataManager
+from config import DB_PATH, SECRET_KEY
+from db.schema import init_db
+from db.user_session_dao import UserSessionDAO
+from .core.routes import core_bp
+from .auth.routes import auth_bp
+from .main.routes import main_bp
+from .ui.phrase_toolbar import PhraseToolbar
+
+def create_app():
+    app = Flask(__name__, 
+                static_folder="static",     # ✅ tell Flask your static path
+                instance_relative_config=True)
+
+    app.config.from_mapping(
+            SECRET_KEY=SECRET_KEY,  # Change in production
+            SQLALCHEMY_DATABASE_URI=DB_PATH,
+            SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        )
+    # Blueprint registration
+    app.register_blueprint(core_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(main_bp)
+
+    # Initialize DB in background
+    Thread(target=init_db_thread, args=(app,), daemon=True).start()
+
+    # Global context
+    @app.context_processor
+    def inject_phrase_toolbar():
+        session_token = AppDataManager.load_session()  # if this depends on Flask session
+        if session_token:
+            user_session = UserSessionDAO.get_session(session_token) or None
+            if user_session:
+                return {"phrase_toolbar": PhraseToolbar(user_session)}
+        return {}
+    
+    @app.context_processor
+    def inject_main_toolbar():
+        return {"main_toolbar": MainToolbar()}
+
+    return app
+
+def init_db_thread(app):
+    """Heavy DB initialization or pre-loading"""
+    with app.app_context():
+        try:
+            init_db()
+        except Exception as e:
+            print("Background DB init failed:", e)
+        

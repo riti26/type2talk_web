@@ -1,0 +1,51 @@
+{% extends "layouts/base_public.html" %}
+{% block title %}Login{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css')}}">
+{% endblock %}
+{% block content %}
+<div class="background">
+    <div class="card">
+        <h2 class="title">Log In</h2>
+
+        <!-- Login Form -->
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <!-- Username -->
+            {{ form.username(class="input", placeholder="Username") }}
+            {% for error in form.username.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+            {% with messages = get_flashed_messages(category_filter=["user_error"]) %}
+                {% if messages %}
+                    <p class="error">{{ messages[0] }}</p>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Password -->
+            {{ form.password(class="input", placeholder="Password") }}
+            {% for error in form.password.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+            {% with messages = get_flashed_messages(category_filter=["password_error"]) %}
+                {% if messages %}
+                    <p class="error">{{ messages[0] }}</p>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Login button -->
+            {{ form.submit(class="btn primary") }}
+        </form>
+
+        <!-- Skip button -->
+        <a href="{{ url_for('main.home') }}" class="btn secondary">Skip</a>
+
+        <!-- Forgot password -->
+        <p><a href="{{ url_for('auth.forgot_password') }}" class="link">Forgot Password?</a></p>
+
+        <!-- Register link -->
+        <p><a href="{{ url_for('auth.signup') }}" class="link">No account? Register here</a></p>
+    </div>
+</div>
+{% endblock %}

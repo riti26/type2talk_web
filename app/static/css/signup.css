@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to top, #204080, #5070ff, #80aaff, #ffffff);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background: white;
+    width: 350px;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0px 8px 20px rgba(96, 128, 255, 0.4);
+    text-align: center;
+}
+
+.title {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.input {
+    display: block;
+    width: 80%;
+    margin: 10px auto;
+    padding: 12px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    width: 80%;
+    padding-right: 40px;
+    display: block;
+    margin: 10px auto;
+}
+
+.toggle-password {
+    position: absolute;
+    right: calc(10% + 10px); /* align inside input */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #666;
+    user-select: none;
+}
+
+.btn {
+    display: block;
+    width: 140px;
+    margin: 15px auto;
+    padding: 10px;
+    border-radius: 25px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn.primary {
+    background: #4d79ff;
+    color: white;
+}
+
+.link {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #3399ff;
+    text-decoration: underline;
+    font-size: 14px;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}

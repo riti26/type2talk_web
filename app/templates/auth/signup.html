@@ -1,0 +1,56 @@
+{% extends "layouts/base_public.html" %}
+{% block title %}Sign Up{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="background">
+    <div class="card">
+        <h2 class="title">Sign Up</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <!-- Username -->
+            {{ form.username(class="input", placeholder="Username") }}
+            {% for error in form.username.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+
+            <!-- Email -->
+            {{ form.email(class="input", placeholder="Email") }}
+            {% for error in form.email.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+
+            <!-- Password -->
+            {{ form.password(class="input", placeholder="Password") }}
+            {% for error in form.password.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+            {% with messages = get_flashed_messages(category_filter=["password_error"]) %}
+                {% if messages %}
+                    <p class="error">{{ messages[0] }}</p>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Confirm Password -->
+            {{ form.confirm_password(class="input", placeholder="Confirm Password") }}
+            {% for error in form.confirm_password.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+            {% with messages = get_flashed_messages(category_filter=["confirm_password_error"]) %}
+                {% if messages %}
+                    <p class="error">{{ messages[0] }}</p>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Submit -->
+            {{ form.submit(class="btn primary") }}
+        </form>
+
+        <a href="{{ url_for('auth.login') }}" class="link">Back to Login</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Home - ACC Communication Board{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/toolbar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/custom_card.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Phrase Toolbar -->
+{% if session.get('session_token') %}
+<section class="phrase-toolbar">
+    <div class="toolbar-words">
+        {% for word in toolbar_phrase %}
+        <div class="toolbar-word">
+            {% if word.icon %}
+            <img src="{{ word.icon }}" class="toolbar-icon">
+            {% endif %}
+            <span>{{ word.text }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="toolbar-buttons-right">
+        <form method="POST" action="{{ url_for('toolbar.toolbar_remove_last') }}">
+            <button type="submit" class="icon-btn">&#9003;</button>
+        </form>
+        <form method="POST" action="{{ url_for('toolbar.toolbar_clear') }}">
+            <button type="submit" class="icon-btn">&#10006;</button>
+        </form>
+        <form method="POST" action="{{ url_for('toolbar.toolbar_speak') }}">
+            <button type="submit" class="icon-btn">&#128264;</button>
+        </form>
+    </div>
+</section>
+{% endif %}
+
+<!-- Category Dashboard -->
+<section class="cards-grid">
+    {% for category in categories %}
+    <a href="{{ url_for('category_items_view', category_id=category.category_id) }}"
+       class="custom-card {% if category.is_standalone %}standalone{% else %}category{% endif %}">
+        <div class="card-image">
+            <img src="{{ category.icon_path or '/static/assets/default.png' }}" alt="{{ category.name }}">
+        </div>
+        <div class="card-text">{{ category.name }}</div>
+    </a>
+    {% endfor %}
+</section>
+
+{% endblock %}

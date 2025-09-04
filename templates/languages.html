@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Language</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Select Language</h2>
+
+        <!-- Search form -->
+        <form method="GET">
+            <input
+                type="text"
+                name="search"
+                placeholder="Search language"
+                value="{{ search_query }}"
+            >
+            <button type="submit">Search</button>
+        </form>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(category_filter=["success"]) %}
+            {% if messages %}
+                <p class="success">{{ messages[0] }}</p>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Language list -->
+        <form method="POST">
+            <ul>
+                {% for lang in languages %}
+                    <li>
+                        <button
+                            type="submit"
+                            name="language_code"
+                            value="{{ lang.code }}"
+                        >
+                            {{ lang.name }}
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </form>
+
+        <!-- Back button -->
+        <a href="{{ url_for('home.home') }}">Back to Home</a>
+    </div>
+</body>
+</html>

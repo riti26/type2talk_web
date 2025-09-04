@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My App{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    {% block extra_css %}{% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<header>
+    <nav class="nav-bar">
+        <div class="nav-title">Home</div>
+        <button class="menu-btn" id="hamburger">&#9776;</button>
+    </nav>
+</header>
+
+<!-- Menu Overlay -->
+<div id="menu-overlay" class="menu-overlay">
+    <div class="menu-content">
+        <button id="close-menu" class="close-menu">&times;</button>
+        <ul id="menu-list">
+            {% for menu in menu_structure %}
+                <li class="menu-item">
+                    <span>{{ menu.root.text }}</span>
+                    {% if menu.children %}
+                        <ul class="submenu">
+                            {% for child in menu.children %}
+                                <li class="menu-item-child">{{ child.text }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<!-- JavaScript for Hamburger Menu -->
+<script>
+    const hamburger = document.getElementById('hamburger');
+    const menuOverlay = document.getElementById('menu-overlay');
+    const closeMenu = document.getElementById('close-menu');
+
+    hamburger.addEventListener('click', () => {
+        menuOverlay.classList.add('active');
+    });
+
+    closeMenu.addEventListener('click', () => {
+        menuOverlay.classList.remove('active');
+    });
+
+    // Close menu when clicking outside
+    menuOverlay.addEventListener('click', (e) => {
+        if (e.target === menuOverlay) {
+            menuOverlay.classList.remove('active');
+        }
+    });
+</script>
+
+</body>
+</html>

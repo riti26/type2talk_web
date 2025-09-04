@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Category Items{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/custom_card.css') }}">
+{% endblock %}
+
+{% block content %}
+<a class="back-button" href="{{ url_for('home.home') }}">← Back</a>
+
+<div class="cards-grid" style="margin-top: 16px;">
+    {% for card in cards %}
+    <form method="POST">
+        <input type="hidden" name="card_id" value="{{ card.id }}">
+        <input type="hidden" name="card_text" value="{{ card.text }}">
+        <input type="hidden" name="card_image" value="{{ card.image }}">
+        <button type="submit" class="custom-card">
+            <div class="card-image">
+                <img src="{{ card.image }}" alt="{{ card.text }}">
+            </div>
+            <div class="card-text">{{ card.text }}</div>
+        </button>
+    </form>
+    {% endfor %}
+</div>
+{% endblock %}
