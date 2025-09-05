@@ -88,6 +88,7 @@ def create_app():
             toolbar_phrase=toolbar_phrase
         )
 
+
     return app
 
 # ---------------- Run App ----------------

@@ -1,0 +1,36 @@
+<div id="actions-toolbar" class="actions-toolbar">
+    <!-- Menu toggle (doesn't change server state) -->
+    <button type="submit" class="action-btn" id="menu-btn" onclick="toggleToolbar()">
+        <i class="fa fa-th"></i>
+    </button>
+
+    <div class="spacer"></div>
+
+    <!-- Select All -->
+    <form method="POST" action="{{ url_for('actions_toolbar.select_all') }}" style="display:none">
+        <button type="submit" id="select-all-btn" class="action-btn" disabled>
+            <i class="fa fa-check-square"></i>
+        </button>
+    </form>
+
+    <!-- Delete -->
+    <form method="POST" action="{{ url_for('actions_toolbar.delete_selected') }}" style="display:none">
+        <button type="submit" id="delete-btn" class="action-btn" disabled>
+            <i class="fa fa-trash"></i>
+        </button>
+    </form>
+
+    <!-- Edit -->
+    <form method="POST" action="{{ url_for('actions_toolbar.edit_selected') }}" style="display:none">
+        <button type="submit" id="edit-btn" class="action-btn" disabled>
+            <i class="fa fa-pencil"></i>
+        </button>
+    </form>
+
+    <!-- Add -->
+    <form method="POST" action="{{ url_for('actions_toolbar.add_item') }}" >
+        <button type="submit" id="add-btn" class="action-btn">
+            <i class="fa fa-plus"></i>
+        </button>
+    </form>
+</div>

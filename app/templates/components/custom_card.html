@@ -1,0 +1,23 @@
+{# templates/components/custom_card.html #}
+{% macro render_card(item, route_name='main.communication_items') %}
+    {% if item.is_standalone %}
+        <div class="custom-card standalone"
+             data-item='{{ item.to_dict() | tojson | safe }}'
+             onclick="handleCardClick(this)">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename=item.image_source or 'images/default.png') }}" 
+                     alt="{{ item.text }}">
+            </div>
+            <div class="card-text">{{ item.text }}</div>
+        </div>
+    {% else %}
+        <a href="{{ url_for(route_name, category_id=item.id) }}"
+           class="custom-card category">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename=item.image_source or 'images/default.png') }}" 
+                     alt="{{ item.text }}">
+            </div>
+            <div class="card-text">{{ item.text }}</div>
+        </a>
+    {% endif %}
+{% endmacro %}

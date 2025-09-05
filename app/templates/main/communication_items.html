@@ -1,14 +1,19 @@
 {% extends "layouts/base_logged_in.html" %}
 {% block title %}Communication Items{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/custom_card.css') }}">
+{% endblock %}
+
+{% import "components/custom_card.html" as custom_card %}
+
 {% block content %}
-<h2>Your Items</h2>
-<form method="post">
-    <input type="text" name="content" placeholder="New item">
-    <button type="submit">Add</button>
-</form>
-<ul>
-    {% for item in data %}
-        <li>{{ item.content }}</li>
+
+<!-- Items Dashboard -->
+<section class="cards-grid">
+    {% for category in cardData %}
+        {{ custom_card.render_card(category) }}
     {% endfor %}
-</ul>
+</section>
+
 {% endblock %}

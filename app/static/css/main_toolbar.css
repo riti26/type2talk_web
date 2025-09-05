@@ -120,6 +120,10 @@
     color: #1e88e5;
 }
 
+.menu-btn span {
+ font-weight: bolder;
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
     .nav-title {

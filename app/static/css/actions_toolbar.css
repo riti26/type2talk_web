@@ -1,0 +1,26 @@
+.actions-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #1a82ff;
+    padding: 10px;
+    height: 50px;
+}
+
+.actions-toolbar .action-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.actions-toolbar .action-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.actions-toolbar .spacer {
+    flex: 1;
+}

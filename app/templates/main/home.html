@@ -1,19 +1,18 @@
 {% extends "layouts/base_logged_in.html" %}
-{% block title %}Home{% endblock %}
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/custom_card.css') }}">
 {% endblock %}
+
+{% import "components/custom_card.html" as custom_card %}
+
 {% block content %}
+
 <!-- Category Dashboard -->
 <section class="cards-grid">
-    {% for category in data %}
-    <a href="{{ url_for('main.communication_items', category_id=category.category_id) }}"
-       class="custom-card {% if category.is_standalone %}standalone{% else %}category{% endif %}">
-        <div class="card-image">
-            <img src="{{ category.icon_path or '/static/assets/default.png' }}" alt="{{ category.name }}">
-        </div>
-        <div class="card-text">{{ category.name }}</div>
-    </a>
+    {% for category in cardData %}
+        {{ custom_card.render_card(category) }}
     {% endfor %}
 </section>
+
 {% endblock %}

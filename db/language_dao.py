@@ -1,10 +1,7 @@
 from db.connection import get_connection
 from models.language import Language
-from kivy.storage.jsonstore import JsonStore
 
 class LanguageDAO:
-    store = JsonStore('app_settings.json')
-
     @staticmethod
     def get_all():
         conn = get_connection()

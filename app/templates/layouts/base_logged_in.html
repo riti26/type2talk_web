@@ -1,10 +1,13 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-    <title>{% block title %}{% endblock %}</title>
-    {% block extra_css %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base_logged_in.css')}}">
-    {% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/actions_toolbar.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='js/custom_card.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/actions_toolbar.js') }}"></script>
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <!-- Phrase Toolbar -->
@@ -20,6 +23,12 @@
             {{ main_toolbar.render()|safe }}
         </div>
     {% endif %}
+
+    <!-- Actions Toolbar -->
+    {% if request.endpoint in ['main.home', 'main.communication_items'] %}
+        {% include "components/actions_toolbar.html" %}
+    {% endif %}
+
     <main>
         {% block content %}{% endblock %}
     </main>

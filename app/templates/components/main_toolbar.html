@@ -4,8 +4,16 @@
 
 {% block content %}
 <nav class="nav-bar">
-    <div class="nav-title">Home</div>
-    <button class="menu-btn" id="hamburger">&#9776;</button>
+    <div class="nav-title">Type2Talk</div>
+    {% if request.endpoint == 'main.home' %}
+        <!-- Show hamburger ONLY on home -->
+        <button class="menu-btn" id="hamburger">&#9776;</button>
+    {% else %}
+        <!-- Show back button on all other routes -->
+        <button class="menu-btn" onclick="history.back()">
+            <span><i class="fa fa-arrow-circle-left"></i></span>
+        </button>
+    {% endif %}
 </nav>
 
 <!-- Menu Overlay -->

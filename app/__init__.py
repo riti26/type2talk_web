@@ -9,6 +9,8 @@ from db.user_session_dao import UserSessionDAO
 from .core.routes import core_bp
 from .auth.routes import auth_bp
 from .main.routes import main_bp
+from .components.custom_card_routes import custom_card_bp
+from .components.actions_toolbar_routes import actions_toolbar_bp
 from .ui.phrase_toolbar import PhraseToolbar
 
 def create_app():
@@ -25,6 +27,8 @@ def create_app():
     app.register_blueprint(core_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
+    app.register_blueprint(custom_card_bp)
+    app.register_blueprint(actions_toolbar_bp)
 
     # Initialize DB in background
     Thread(target=init_db_thread, args=(app,), daemon=True).start()
