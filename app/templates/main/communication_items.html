@@ -7,7 +7,7 @@
     <button type="submit">Add</button>
 </form>
 <ul>
-    {% for item in current_user.communication_items %}
+    {% for item in data %}
         <li>{{ item.content }}</li>
     {% endfor %}
 </ul>

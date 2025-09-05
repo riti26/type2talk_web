@@ -11,9 +11,10 @@ def home():
     data = get_category_data()
     return render_template("main/home.html", data=data)
 
-@main_bp.route("/communication-items")
+@main_bp.route("/communication-items/<int:category_id>")
 @login_required
-def communication_items():
-    category_id = request.args.get("category_id", type=int)
+def communication_items(category_id):
     data = get_communication_item(category_id)
+    if not data:
+            return "Category not found", 404
     return render_template("main/communication_items.html", data=data)

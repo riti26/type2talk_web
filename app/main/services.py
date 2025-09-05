@@ -11,7 +11,7 @@ def get_category_data():
 
     categories = CategoryDAO.get_all(user_id=user_id)
 
-    return {"categories": categories}
+    return categories
 
 def get_communication_item(category_id):
     items = ItemDAO.get_by_category(category_id)
