@@ -21,7 +21,7 @@ def home():# Reset toolbar on entering Home
 def communication_items(category_id):# Reset toolbar on entering Home
     session["toolbar_expanded"] = False
     items = get_communication_item(category_id)
-    cardData: CardItem = [CardItem(id=item.item_id, type="communication_item", text=item.text, image_source=item.icon_path, is_standalone=True) for item in items]
+    cardData: CardItem = [CardItem(id=item.item_id, type="communication_items", text=item.text, image_source=item.icon_path, is_standalone=True) for item in items]
 
     return render_template("main/communication_items.html",
                            cardData=cardData,

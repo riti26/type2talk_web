@@ -1,0 +1,89 @@
+<div id="category-popup" class="popup-overlay" style="display:none;">
+  <div class="popup-container">
+    <div class="popup-header">
+      <h2 id="popup-title">Add New Category</h2>
+    </div>
+
+    <form id="category-form" class="popup-form" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="name">Category Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter category name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="icon">Icon</label>
+        <input type="file" id="icon" name="icon" accept="image/*">
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" placeholder="Enter a short description"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Category Type</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="is_standalone" value="1" required>
+            Word
+          </label>
+          <label>
+            <input type="radio" name="is_standalone" value="0" required>
+            Folder
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions" style="display: flex; justify-content: space-between;">
+        <button type="button" class="cancel-btn" onclick="closePopup()">Cancel</button>
+        <button type="submit" class="submit-btn" id="popup-submit-btn">Create</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+{# templates/components/popup_form.html #}
+<div id="delete-confirm-popup" class="popup-overlay" style="display:none;">
+  <div class="popup-container">
+    <h3 class="popup-title">Delete Categories</h3>
+    <p class="popup-message">Are you sure you want to delete the selected categories?</p>
+
+    <div class="popup-actions">
+      <button id="delete-confirm-no" class="cancel-btn">Cancel</button>
+      <button id="delete-confirm-yes" class="submit-btn">Yes</button>
+    </div>
+  </div>
+</div>
+
+
+{# Edit category popup (only name + icon) #}
+<div id="edit-popup" class="popup-overlay" style="display:none;">
+  <div class="popup-container">
+    <div class="popup-header">
+      <h2>Edit Category</h2>
+    </div>
+
+    <form id="edit-form" class="popup-form" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="edit-name">Category Name</label>
+        <!-- Removed 'required' so you can edit only image -->
+        <input type="text" id="edit-name" name="name" placeholder="Enter category name">
+      </div>
+
+      <div class="form-group">
+        <label for="edit-icon">Icon</label>
+        <input type="file" id="edit-icon" name="icon" accept="image/*">
+        <img id="edit-icon-preview" src="" alt="Preview" style="max-width:80px; margin-top:5px; display:none;"/>
+      </div>
+
+      <div class="form-actions" style="display: flex; justify-content: space-between;">
+        <button type="button" class="cancel-btn" onclick="document.getElementById('edit-popup').style.display='none'">Cancel</button>
+        <button type="submit" class="submit-btn">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+

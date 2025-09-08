@@ -1,5 +1,4 @@
 from flask import render_template
-from app.models.communication_item import CommunicationItem
 from app.utils.add_data_manager import AppDataManager
 from db.user_session_dao import UserSessionDAO
 

@@ -16,43 +16,46 @@
     {% endif %}
 </nav>
 
-<!-- Menu Overlay -->
-<div id="menu-overlay" class="menu-overlay">
-    <div class="menu-content">
-        <ul id="menu-list">
-            {% for menu in menu_structure %}
-                <li class="menu-item">
-                    <span>{{ menu.root.text }}</span>
-                    {% if menu.children %}
-                        <ul class="submenu">
-                            {% for child in menu.children %}
-                                <li class="menu-item-child">{{ child.text }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+<!-- Floating menu panel (no full overlay) -->
+<div id="menu-content" class="menu-content">
+    <ul id="menu-list">
+        {% for menu in menu_structure %}
+            <li class="menu-item">
+                <span>{{ menu.root.text }}</span>
+                {% if menu.children %}
+                    <ul class="submenu">
+                        {% for child in menu.children %}
+                            <li class="menu-item-child">{{ child.text }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
 
 <!-- JavaScript for Hamburger Menu -->
 <script>
-    const hamburger = document.getElementById('hamburger');
-    const menuOverlay = document.getElementById('menu-overlay');
-    const menuContent = document.querySelector('.menu-content');
+const hamburger = document.getElementById('hamburger');
+const menuContent = document.getElementById('menu-content');
 
-    // Toggle menu when hamburger clicked
-    // Toggle overlay on hamburger click
-    hamburger.addEventListener('click', () => {
-        menuOverlay.classList.toggle('active');
-    });
+hamburger.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevent click from bubbling
+    menuContent.classList.toggle('active');
+});
 
-    // Close overlay when clicking outside menu-content
-    menuOverlay.addEventListener('click', (e) => {
-        if (!menuContent.contains(e.target)) {
-            menuOverlay.classList.remove('active');
-        }
+// Close menu if clicking outside
+document.addEventListener('click', (e) => {
+    if (!menuContent.contains(e.target) && e.target !== hamburger) {
+        menuContent.classList.remove('active');
+    }
+});
+
+// Close menu when clicking a menu item
+document.querySelectorAll('.menu-item, .menu-item-child').forEach(item => {
+    item.addEventListener('click', () => {
+        menuContent.classList.remove('active');
     });
+});
 </script>

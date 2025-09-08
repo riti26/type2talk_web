@@ -1,18 +1,24 @@
 {% extends "layouts/base_logged_in.html" %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/custom_card.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}">
 {% endblock %}
 
 {% import "components/custom_card.html" as custom_card %}
 
 {% block content %}
-
-<!-- Category Dashboard -->
 <section class="cards-grid">
     {% for category in cardData %}
         {{ custom_card.render_card(category) }}
     {% endfor %}
 </section>
 
+<!-- Add Category Popup -->
+{% include "components/popup_form.html" %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/actions_toolbar.js') }}"></script>
 {% endblock %}

@@ -7,11 +7,10 @@ function handleCardClick(cardElement) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(itemData)
     })
-    .then(res => res.blob()) // get binary audio
-    .then(blob => {
-        const audioUrl = URL.createObjectURL(blob);
-        const audio = new Audio(audioUrl);
-        audio.play();
+    .then(res => res.json())
+    .then(data => {
+        console.log("Server response:", data);
+        // optionally do something in UI
     })
     .catch(err => console.error(err));
 }

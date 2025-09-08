@@ -8,6 +8,7 @@
 
 .custom-card {
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     padding: 12px;
@@ -25,11 +26,6 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-.custom-card.selected {
-    border: 2px solid #1e88e5;
-    background: #e3f2fd;
-}
-
 .card-image img {
     width: 80px;
     height: 80px;
@@ -38,3 +34,17 @@
     object-fit: contain;
 }
 
+/* static/css/custom_card.css */
+.custom-card.selected {
+    border: 2px solid #007BFF;
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.card-select-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #007bff;
+}

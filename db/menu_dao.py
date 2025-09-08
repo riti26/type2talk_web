@@ -1,5 +1,5 @@
+from app.models.menu import Menu
 from db.connection import get_connection
-from models.menu import Menu
 
 class MenuDAO:
     @staticmethod

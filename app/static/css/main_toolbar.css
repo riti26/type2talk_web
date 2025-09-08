@@ -10,14 +10,15 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    backdrop-filter: blur(5px);
 }
 
 /* Title centered */
 .nav-title {
     flex: 1;
     text-align: center;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 20px;
 }
 
@@ -28,7 +29,7 @@
     height: 40px;
     background: none;
     border: none;
-    border-radius: 50%;
+    border-radius: 12px;
     cursor: pointer;
     color: white;
     display: flex;
@@ -42,95 +43,88 @@
     transform: scale(1.1);
 }
 
-/* Menu overlay (from right) */
-.menu-overlay {
-    position: fixed;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
-    background: rgba(0,0,0,0.2);
-    z-index: 1000;
-}
-
-/* When active, show it */
-.menu-overlay.active {
-    display: block;
-}
-
-/* Actual menu box */
+/* Floating menu panel */
 .menu-content {
-    position: absolute;
-    right: 0; /* start from right side */
-    width: 250px;
-    max-width: 80%;
-    height: 100%;
+    position: absolute;       /* floating below hamburger */
+    top: 60px;                 /* adjust based on nav-bar height */
+    right: 20px;
+    width: 280px;
+    max-width: 85%;
     background: #fff;
-    padding: 20px;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.3);
-    transform: translateX(100%); /* hidden by default */
-    transition: transform 0.3s ease;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    transform: translateX(100%);   /* hidden by default */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 80px); /* scroll if too tall */
+    overflow-y: auto;
+    z-index: 1001;
 }
 
-/* Active slide-in */
-.menu-overlay.active .menu-content {
+/* Active state */
+.menu-content.active {
     transform: translateX(0);
+    opacity: 1;
 }
 
+/* Menu list */
 .menu-content ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
+/* Menu items */
 .menu-content li {
-    padding: 10px 15px;
+    padding: 12px 16px;
     cursor: pointer;
     font-weight: 500;
-    border-bottom: 1px solid #eee;
     border-radius: 8px;
-    transition: background 0.2s, color 0.2s;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+}
+
+.menu-content li:hover {
+    background-color: #1e88e5;
+    color: #fff;
 }
 
 /* Submenu items */
 .menu-content li ul {
     padding-left: 15px;
     font-weight: 400;
-    border-bottom: none;
-}
-
-/* Hover effect */
-.menu-content li:hover {
-    background-color: #1e88e5;
-    color: #fff;
-}
-
-/* Close button */
-.close-menu {
-    font-size: 28px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    margin-bottom: 20px;
-    color: #333;
-    transition: color 0.2s;
-}
-
-.close-menu:hover {
-    color: #1e88e5;
-}
-
-.menu-btn span {
- font-weight: bolder;
 }
 
 /* Responsive adjustments */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .nav-title {
         font-size: 18px;
     }
     .menu-btn {
         width: 36px;
         height: 36px;
+    }
+    .menu-content {
+        width: 240px;
+        max-width: 80%;
+        top: 55px;
+        right: 10px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-title {
+        font-size: 16px;
+    }
+    .menu-content {
+        width: 200px;
+        max-width: 90%;
+        top: 50px;
+        right: 8px;
+        padding: 12px;
     }
 }

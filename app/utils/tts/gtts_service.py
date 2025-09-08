@@ -1,6 +1,6 @@
 import io
 from gtts import gTTS
-from utils.add_data_manager import AppDataManager
+from app.utils.add_data_manager import AppDataManager
 
 """
 Generates speech audio from text and returns it as an in-memory file for Flask.
