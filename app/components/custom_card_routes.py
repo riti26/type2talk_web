@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify, send_file
 
 from app.utils.tts.gtts_service import play_text
-from db.category_dao import CategoryDAO
 
 custom_card_bp = Blueprint("custom_card", __name__)
 

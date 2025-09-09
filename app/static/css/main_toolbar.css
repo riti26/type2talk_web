@@ -45,8 +45,8 @@
 
 /* Floating menu panel */
 .menu-content {
-    position: absolute;       /* floating below hamburger */
-    top: 60px;                 /* adjust based on nav-bar height */
+    position: absolute;       
+    top: 80px;      /* slightly below hamburger */
     right: 20px;
     width: 280px;
     max-width: 85%;
@@ -54,12 +54,12 @@
     padding: 15px 20px;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    transform: translateX(100%);   /* hidden by default */
+    transform: translateX(100%);   
     transition: transform 0.3s ease, opacity 0.3s ease;
     opacity: 0;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 80px); /* scroll if too tall */
+    max-height: calc(100vh - 100px); /* leave space from top & bottom */
     overflow-y: auto;
     z-index: 1001;
 }
@@ -98,6 +98,27 @@
     font-weight: 400;
 }
 
+/* Close button */
+.close-menu {
+    font-size: 28px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+    color: #333;
+    align-self: flex-end;
+    transition: color 0.2s;
+}
+
+.close-menu:hover {
+    color: #1e88e5;
+}
+
+/* Menu button span */
+.menu-btn span {
+    font-weight: bolder;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .nav-title {
@@ -110,7 +131,7 @@
     .menu-content {
         width: 240px;
         max-width: 80%;
-        top: 55px;
+        top: 75px;   /* slightly below hamburger */
         right: 10px;
         padding: 15px;
     }
@@ -123,7 +144,7 @@
     .menu-content {
         width: 200px;
         max-width: 90%;
-        top: 50px;
+        top: 70px;   /* slightly below hamburger */
         right: 8px;
         padding: 12px;
     }

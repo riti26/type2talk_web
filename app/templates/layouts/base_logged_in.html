@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base_logged_in.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/actions_toolbar.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="{{ url_for('static', filename='js/custom_card.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/actions_toolbar.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/base.js') }}"></script>
+
     {% block extra_css %}{% endblock %}
 </head>
 <body>

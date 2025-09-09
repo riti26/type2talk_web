@@ -58,27 +58,27 @@ class ItemDAO:
 
         return items
 
-    @staticmethod
-    def update(item_id, text, icon_path=None, audio_path=None) -> None:
-        """
-        Update the communication_item record corresponding to item.item_id
-        using all fields from the CommunicationItem object.
-        """
-        text = translate_to_english_sync(text)
+    # @staticmethod
+    # def update(item_id, text, icon_path=None, audio_path=None) -> None:
+    #     """
+    #     Update the communication_item record corresponding to item.item_id
+    #     using all fields from the CommunicationItem object.
+    #     """
+    #     text = translate_to_english_sync(text)
 
-        with get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-                UPDATE communication_item
-                SET label = ?, icon_path = ?, audio_path = ?
-                WHERE item_id = ?
-            """, (
-                text,
-                icon_path,
-                audio_path,
-                item_id
-            ))
-            conn.commit()
+    #     with get_connection() as conn:
+    #         cursor = conn.cursor()
+    #         cursor.execute("""
+    #             UPDATE communication_item
+    #             SET label = ?, icon_path = ?, audio_path = ?
+    #             WHERE item_id = ?
+    #         """, (
+    #             text,
+    #             icon_path,
+    #             audio_path,
+    #             item_id
+    #         ))
+    #         conn.commit()
     
     def delete_multiple(item_ids):
         if not item_ids:
@@ -95,3 +95,55 @@ class ItemDAO:
         
         conn.commit()
         conn.close()
+
+    @staticmethod
+    def update(item_id: int, text: str, icon_path: str = None,
+               audio_path: str = None) -> CommunicationItem | None:
+        """
+        Update category. If icon_path is None, keep the existing value.
+        """
+        text = translate_to_english_sync(text)
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        if icon_path is None:
+           cursor.execute("""
+                UPDATE communication_item
+                SET label = ?, audio_path = ?
+                WHERE item_id = ?
+            """, (
+                text,
+                audio_path,
+                item_id
+            ))
+        else:
+           cursor.execute("""
+                UPDATE communication_item
+                SET label = ?, icon_path = ?, audio_path = ?
+                WHERE item_id = ?
+            """, (
+                text,
+                icon_path,
+                audio_path,
+                item_id
+            ))
+
+        conn.commit()
+
+        # fetch the updated row
+        cursor.execute("""
+            "SELECT * FROM communication_item
+            WHERE item_id = ?
+        """, (item_id,))
+        row = cursor.fetchone()
+        conn.close()
+
+        if row:
+            return CommunicationItem(
+                item_id=row[0],
+                category_id=row[1],
+                text=row[2],
+                icon_path=row[3],
+                audio_path=row[4] 
+            )
+        return None
