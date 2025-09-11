@@ -10,9 +10,9 @@
         <button class="menu-btn" id="hamburger">&#9776;</button>
     {% else %}
         <!-- Show back button on all other routes -->
-        <button class="menu-btn" onclick="history.back()">
+        <a class="menu-btn" href="{{ url_for('main.home') }}">
             <span><i class="fa fa-arrow-circle-left"></i></span>
-        </button>
+        </a>
     {% endif %}
 </nav>
 

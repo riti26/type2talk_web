@@ -4,16 +4,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base_logged_in.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/actions_toolbar.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/phrase_toolbar.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script type="module" src="{{ url_for('static', filename='js/base.js') }}"></script>
-
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     <!-- Phrase Toolbar -->
-    {% if phrase_toolbar %}
-        <div id="phrase-toolbar">
-            {{ phrase_toolbar.render()|safe }}
+    {% if request.endpoint in ['main.home', 'main.communication_items'] %}
+        <div id="phrase-toolbar-wrapper">
+            {% include "components/phrase_toolbar.html" %}
         </div>
     {% endif %}
 
@@ -29,8 +28,19 @@
         {% include "components/actions_toolbar.html" %}
     {% endif %}
 
-    <main>
+    <main id="main-content">
         {% block content %}{% endblock %}
     </main>
+    <!-- JS Modules -->
+    <script type="module" src="{{ url_for('static', filename='js/base.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/actions_toolbar.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/cards.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/item_add.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/item_edit.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/item_delete.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/phrase_toolbar_state.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/phrase_toolbar.js') }}"></script>
+
+
 </body>
 </html>

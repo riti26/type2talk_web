@@ -4,10 +4,15 @@
       <h2 id="popup-title">Add New Category</h2>
     </div>
 
-    <form id="category-form" class="popup-form" enctype="multipart/form-data">
+    <!-- Removed action attribute, JS sets it dynamically -->
+    <form id="popup-form" method="POST" enctype="multipart/form-data">
+      <!-- Hidden input for category ID (used when adding items) -->
+      <input type="hidden" id="item-category-id" name="category_id">
+
+      <!-- Shared fields -->
       <div class="form-group">
-        <label for="name">Category Name</label>
-        <input type="text" id="name" name="name" placeholder="Enter category name" required>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
       </div>
 
       <div class="form-group">
@@ -15,21 +20,20 @@
         <input type="file" id="icon" name="icon" accept="image/*">
       </div>
 
-      <div class="form-group">
+      <!-- Category-only fields -->
+      <div class="form-group category-field">
         <label for="description">Description</label>
         <textarea id="description" name="description" placeholder="Enter a short description"></textarea>
       </div>
 
-      <div class="form-group">
+      <div class="form-group category-field">
         <label>Category Type</label>
         <div class="radio-group">
           <label>
-            <input type="radio" name="is_standalone" value="1" required>
-            Word
+            <input type="radio" name="is_standalone" value="1"> Word
           </label>
           <label>
-            <input type="radio" name="is_standalone" value="0" required>
-            Folder
+            <input type="radio" name="is_standalone" value="0"> Folder
           </label>
         </div>
       </div>
@@ -41,7 +45,6 @@
     </form>
   </div>
 </div>
-
 
 {# templates/components/popup_form.html #}
 <div id="delete-confirm-popup" class="popup-overlay" style="display:none;">

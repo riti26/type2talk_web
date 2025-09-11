@@ -1,7 +1,23 @@
-<nav>
-    <span>Hello, {{ phrase_toolbar.user.username }}</span>
-    <a href="{{ url_for('main.home') }}">Home</a>
-        Communication Items{% if phrase_toolbar.unread_count > 0 %} ({{ phrase_toolbar.unread_count }}){% endif %}
-    </a>
-    <a href="{{ url_for('auth.logout') }}">Logout</a>
-</nav>
+<div id="phrase-toolbar" class="phrase-toolbar-container">
+    <!-- Scrollable cards container -->
+    <div id="phrase-items-container" class="scrollable-cards">
+        <!-- JS will populate phrase items here -->
+    </div>
+
+    <div id="phrase-toolbar-buttons">
+        <button id="play-phrase-btn" class="btn btn-play" onclick="playPhrase()">
+            <i class="fa fa-volume-up"></i> Play
+        </button>
+        <button id="clear-phrase-btn" class="btn btn-clear" onclick="deleteLastItem()">
+            <i class="fa fa-trash"></i> Clear
+        </button>
+</div>
+    </div>
+</div>
+
+<template id="phrase-item-template">
+    <div class="phrase-item-card">
+        <img src="" alt="">
+        <span></span>
+    </div>
+</template>

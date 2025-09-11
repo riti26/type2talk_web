@@ -4,6 +4,7 @@ import { initPopups } from "./popup.js";
 import { initAddItemForm } from "./item_add.js";
 import { initDelete } from "./item_delete.js";
 import { initEdit } from "./item_edit.js";
+import { renderPhraseToolbar, initPhraseToolbar } from "./phrase_toolbar.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     initActionsToolbar();
@@ -11,4 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
     initAddItemForm();
     initDelete();
     initEdit();
+    initPhraseToolbar();
+    renderPhraseToolbar();
 });

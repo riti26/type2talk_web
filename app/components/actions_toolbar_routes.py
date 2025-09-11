@@ -190,3 +190,44 @@ def add_item():
         "success": True,
         "html": html
     })
+
+@actions_toolbar_bp.route("/add_communication_item", methods=["POST"])
+def add_communication_item():
+    category_id = request.form.get("category_id")
+    if not category_id:
+        return jsonify({"success": False, "error": "Missing category ID"})
+
+    name = request.form.get("name")
+    icon_file = request.files.get("icon")
+
+    # Save icon file
+    icon_path = None
+    if icon_file and icon_file.filename != "":
+        filename = secure_filename(icon_file.filename)
+        save_folder = os.path.join("app", "static", "images")
+        os.makedirs(save_folder, exist_ok=True)
+        save_path = os.path.join(save_folder, filename)
+        icon_file.save(save_path)
+        icon_path = f"images/{filename}"
+
+    # Add item to DB
+    item = ItemDAO.add(
+        category_id=int(category_id),
+        text=name,
+        icon_path=icon_path
+    )
+
+    # Render HTML card
+    cardData = CardItem(
+        id=item.item_id,
+        type="item",
+        text=item.text,
+        image_source=item.icon_path,
+        is_standalone=True
+    )
+    macro_template = "{% import 'components/custom_card.html' as custom_card %}{{ custom_card.render_card(item) }}"
+    html = render_template_string(macro_template, item=cardData)
+
+    return jsonify({"success": True, "html": html})
+
+

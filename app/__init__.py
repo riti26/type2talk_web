@@ -36,12 +36,7 @@ def create_app():
     # Global context
     @app.context_processor
     def inject_phrase_toolbar():
-        session_token = AppDataManager.load_session()  # if this depends on Flask session
-        if session_token:
-            user_session = UserSessionDAO.get_session(session_token) or None
-            if user_session:
-                return {"phrase_toolbar": PhraseToolbar(user_session)}
-        return {}
+        return { "phrase_toolbar": PhraseToolbar()}
     
     @app.context_processor
     def inject_main_toolbar():

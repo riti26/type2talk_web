@@ -1,4 +1,3 @@
-// utils.js
 export function resetActionsToolbar(selectedCards, state) {
     fetch("/actions_toolbar/reset_toolbar", {
         method: "POST",
@@ -7,7 +6,7 @@ export function resetActionsToolbar(selectedCards, state) {
     })
     .then(res => res.json())
     .then(data => {
-        selectedCards.clear();       
+        selectedCards.clear();
         updateActionsToolbarIcon(selectedCards, document.querySelectorAll(".custom-card").length);
         document.querySelectorAll(".custom-card.selected").forEach(card => {
             card.classList.remove("selected");
@@ -60,4 +59,16 @@ export function updateActionsToolbarIcon(selectedCards, totalCardsLength) {
     if (editBtn) {
         editBtn.disabled = (selectedCards.size > 1 || selectedCards.size === 0);
     }
+}
+
+export function getScreenName() {
+    const path = new URL(window.location.href).pathname;
+    const segments = path.split("/").filter(Boolean);
+    return segments[1] || null;
+}
+
+export function getLastPathSegment() {
+    const path = new URL(window.location.href).pathname;
+    const segments = path.split("/").filter(Boolean);
+    return segments.pop() || null;
 }

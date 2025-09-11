@@ -1,5 +1,6 @@
 // toolbar.js
 import { resetActionsToolbar, updateActionsToolbarIcon, toggleCardSelection } from "./utils.js";
+import { handleCardClick } from './cards.js'
 
 let selectedCards = new Set();
 let cardType = null;
@@ -43,59 +44,16 @@ export function initActionsToolbar() {
         });
     };
 
-    // ---------------- Handle single card click ----------------
-    window.handleCardClick = function(cardElem, event) {
-        if (toolbarExpanded) {
-            event.preventDefault(); // prevent navigation
-
-            cardType = cardElem.dataset.item ? JSON.parse(cardElem.dataset.item).type : null;
-
-            // Toggle selection in Set
-            if (selectedCards.has(cardElem.dataset.id)) {
-                selectedCards.delete(cardElem.dataset.id);
-            } else {
-                selectedCards.add(cardElem.dataset.id);
-            }
-
-            // Update selectAll state
-            if (selectedCards.size < totalCardsLength) 
-                selectAll = false;
-            else if (selectedCards.size === totalCardsLength)
-                selectAll = true;
-
-            // Toggle visual selection and icon
-            toggleCardSelection(cardElem);
-
-            updateActionsToolbarIcon(selectedCards, document.querySelectorAll(".custom-card").length);
-        } else {
-            // Toolbar collapsed: navigate
-            const item = cardElem.dataset.item ? JSON.parse(cardElem.dataset.item) : null;
-            if(item && item.is_standalone) {
-                if (item.is_standalone) {
-                    fetch(cardElem.dataset.url, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ text: item.text })
-                    })
-                    .then(response => {
-                        if (!response.ok) throw new Error("HTTP " + response.status);
-                        return response.blob();
-                    })
-                    .then(blob => {
-                        const audio = new Audio(URL.createObjectURL(blob));
-                        return audio.play();
-                    })
-                    .catch(err => console.error("Playback error:", err));
-                }
-            }
-            else 
-            {
-                // Navigate to card's URL
-                const url = cardElem.dataset.url;
-                window.location.href = url;
-            }
+    // Attach card click handler globally
+    window.handleCardClick = (cardElem, event) => {
+        handleCardClick(cardElem, event, { toolbarExpanded, selectedCards});
+        // update selectAll here
+        if (selectedCards.size < totalCardsLength) {
+            selectAll = false;
+        } else if (selectedCards.size === totalCardsLength) {
+            selectAll = true;
         }
-    }
+    };
 
     // ---------------- Select all ----------------
     const selectAllForm = document.querySelector('form[action$="select_all"]');
@@ -130,7 +88,6 @@ export function initActionsToolbar() {
                 });
             }
 
-            console.log("All selected:", Array.from(selectedCards));
             updateActionsToolbarIcon(selectedCards, document.querySelectorAll(".custom-card").length);
         });
     }
