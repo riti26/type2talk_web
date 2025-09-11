@@ -1,5 +1,5 @@
 from db.connection import get_connection
-from models.language import Language
+from app.models.language import Language
 
 class LanguageDAO:
     @staticmethod

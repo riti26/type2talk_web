@@ -7,7 +7,7 @@
     <div class="nav-title">Type2Talk</div>
     {% if request.endpoint == 'main.home' %}
         <!-- Show hamburger ONLY on home -->
-        <button class="menu-btn" id="hamburger">&#9776;</button>
+        <button class="menu-btn" id="main-menu" onClick="onMainMenuClick(this)">&#9776;</button>
     {% else %}
         <!-- Show back button on all other routes -->
         <a class="menu-btn" href="{{ url_for('main.home') }}">
@@ -18,44 +18,13 @@
 
 <!-- Floating menu panel (no full overlay) -->
 <div id="menu-content" class="menu-content">
+    <div class="username-item">{{username}}</div>
     <ul id="menu-list">
         {% for menu in menu_structure %}
-            <li class="menu-item">
-                <span>{{ menu.root.text }}</span>
-                {% if menu.children %}
-                    <ul class="submenu">
-                        {% for child in menu.children %}
-                            <li class="menu-item-child">{{ child.text }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </li>
+        <li class="menu-item" onclick="onMenuClick('{{menu.name}}')">
+            <span>{{ menu.text }}</span>
+        </li>
         {% endfor %}
     </ul>
 </div>
 {% endblock %}
-
-<!-- JavaScript for Hamburger Menu -->
-<script>
-const hamburger = document.getElementById('hamburger');
-const menuContent = document.getElementById('menu-content');
-
-hamburger.addEventListener('click', (e) => {
-    e.stopPropagation(); // prevent click from bubbling
-    menuContent.classList.toggle('active');
-});
-
-// Close menu if clicking outside
-document.addEventListener('click', (e) => {
-    if (!menuContent.contains(e.target) && e.target !== hamburger) {
-        menuContent.classList.remove('active');
-    }
-});
-
-// Close menu when clicking a menu item
-document.querySelectorAll('.menu-item, .menu-item-child').forEach(item => {
-    item.addEventListener('click', () => {
-        menuContent.classList.remove('active');
-    });
-});
-</script>

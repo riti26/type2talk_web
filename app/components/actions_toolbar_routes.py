@@ -94,7 +94,7 @@ def edit_selected():
             cardData = CardItem(
                 id=category.category_id,
                 type="category",
-                text=updatedCategory.name,
+                text=name,
                 image_source=updatedCategory.icon_path,
                 is_standalone=updatedCategory.is_standalone,
             )
@@ -126,7 +126,7 @@ def edit_selected():
             cardData = CardItem(
                 id=updatedCommunicationItem.item_id,
                 type="communication_items",
-                text=updatedCommunicationItem.text,
+                text=name,
                 image_source=updatedCommunicationItem.icon_path,
                 is_standalone=True,
             )
@@ -138,7 +138,6 @@ def edit_selected():
         "success": True,
         "html": html
     })
-
 
 # ---------------- Add new category ----------------
 @actions_toolbar_bp.route("/add_item", methods=["POST"])
@@ -179,7 +178,7 @@ def add_item():
     cardData: CardItem = CardItem(
         id=category.category_id,
         type="category",
-        text=category.name,
+        text=name,
         image_source=category.icon_path,
         is_standalone=category.is_standalone,
     )
@@ -221,7 +220,7 @@ def add_communication_item():
     cardData = CardItem(
         id=item.item_id,
         type="item",
-        text=item.text,
+        text=name,
         image_source=item.icon_path,
         is_standalone=True
     )

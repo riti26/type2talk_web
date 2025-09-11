@@ -1,0 +1,33 @@
+{% extends "layouts/base_logged_in.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/language.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="language-screen">
+
+    <!-- Search Field -->
+    <div class="search-container">
+        <input 
+            type="text" 
+            id="search_field" 
+            placeholder="Search language" 
+            autocomplete="off"
+        />
+    </div>
+
+    <!-- Scrollable language list -->
+    <div class="languages-container" id="language_list">
+        {% for lang in languages %}
+        <div class="language-card" data-name="{{ lang.name|capitalize }}" data-code="{{ lang.code }}">
+            <strong class="lang-name">{{ lang.name }}</strong>
+            <p>{{ lang.code|upper }}</p>
+        </div>
+        {% endfor %}
+        <p id="no-languages" style="display:none;">No matching languages found.</p>
+    </div>
+
+</div>
+{% endblock %}
+

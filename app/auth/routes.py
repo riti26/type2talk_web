@@ -44,12 +44,6 @@ def signup():
             form.email.errors.append("Email already registered!")
     return render_template("auth/signup.html", form=form)
 
-@auth_bp.route("/logout")
-@login_required
-def logout():
-    if UserSessionDAO.logout(AppDataManager.load_session()):
-        return redirect(url_for("auth.login"))
-
 @auth_bp.route("/forgot_password", methods=["GET", "POST"])
 def forgot_password():
     form = ForgotPasswordForm()

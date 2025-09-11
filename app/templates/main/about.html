@@ -1,0 +1,17 @@
+{% extends "layouts/base_logged_in.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="about-screen">
+    <div class="about-container">
+        <h1>About Type2Talk</h1>
+        <p><strong>Type2Talk</strong> is a modern, thoughtfully designed web application that empowers individuals with social, communication, and speech challenges, including those who are deaf or hard of hearing.</p>
+        <p>Our platform bridges communication gaps by providing an intuitive interface that allows users to express themselves, learn new ways to communicate, and connect meaningfully with others. Whether practicing conversations, learning phrases, or engaging with a supportive community, Type2Talk helps users participate fully in everyday life.</p>
+        <p>Built with Python and modern web technologies, Type2Talk combines accessibility, functionality, and simplicity. The platform is inclusively designed, offering tools and features tailored to the needs of individuals facing communication barriers.</p>
+        <p><strong>Our Mission:</strong> To create a safe, accessible, and effective communication tool that fosters independence, confidence, and social inclusion. By leveraging technology, we aim to remove barriers and open new possibilities, making communication, learning, and social interaction easier and more enjoyable for everyone.</p>
+    </div>
+</div>
+{% endblock %}

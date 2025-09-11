@@ -1,6 +1,6 @@
 // edit.js
 import { selectedCards, cardType } from "./actions_toolbar.js";
-import { updateActionsToolbarIcon } from "./utils.js";
+import { updateActionsToolbarIcon, getScreenName } from "./utils.js";
 
 export function initEdit() {
     const editForm = document.getElementById("edit-form");
@@ -75,7 +75,7 @@ export function initEdit() {
             const itemId = Array.from(selectedCards)[0];
             const formData = new FormData(editForm);
             formData.append("selected_item", itemId);
-            formData.append("type", cardType);
+            formData.append("type", getScreenName() == "home" ? "category" : "communication_items" );
 
             fetch("/actions_toolbar/edit_selected", {
                 method: "POST",

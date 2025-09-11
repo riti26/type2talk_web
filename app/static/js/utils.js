@@ -72,3 +72,14 @@ export function getLastPathSegment() {
     const segments = path.split("/").filter(Boolean);
     return segments.pop() || null;
 }
+
+export function showToast(message, success = true) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.background = success ? '#4caf50' : '#f44336'; // green/red
+    toast.style.display = 'block';
+
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 3000); // hide after 3 seconds
+}

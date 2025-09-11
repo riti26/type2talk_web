@@ -17,7 +17,7 @@
     {% endif %}
 
     <!-- Main Toolbar -->
-    {% if main_toolbar %}
+    {% if request.endpoint in ['main.home', 'main.communication_items', 'main.settings','main.language','main.about'] %}
         <div id="main-toolbar">
             {{ main_toolbar.render()|safe }}
         </div>
@@ -31,6 +31,9 @@
     <main id="main-content">
         {% block content %}{% endblock %}
     </main>
+
+    <div id="toast" style="display:none; position: fixed; bottom: 20px; justify-self: center; padding: 10px 15px; color: white; border-radius: 5px; z-index: 9999;"></div>
+
     <!-- JS Modules -->
     <script type="module" src="{{ url_for('static', filename='js/base.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/actions_toolbar.js') }}"></script>
@@ -38,8 +41,8 @@
     <script type="module" src="{{ url_for('static', filename='js/item_add.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/item_edit.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/item_delete.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='js/phrase_toolbar_state.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/phrase_toolbar.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/main_toolbar.js') }}"></script>
 
 
 </body>

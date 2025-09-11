@@ -1,0 +1,71 @@
+/* Container fills full viewport */
+.about-screen {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden; /* prevents scrollbars */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    padding: 10px;
+}
+
+/* Center the content and force fit inside screen */
+.about-container {
+    flex: 1;
+    max-width: 800px;
+    margin: auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    text-align: center;
+    line-height: 1.7;
+    color: #333;
+
+    /* Remove any scrollbars */
+    overflow: hidden;
+}
+
+/* Titles and text */
+.about-container h1 {
+    font-size: 2.5rem;
+    color: #1976d2;
+    margin-bottom: 20px;
+}
+
+.about-container p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.about-container strong {
+    color: #1976d2;
+}
+
+/* Responsive tweaks */
+@media screen and (max-width: 900px) {
+    .about-container {
+        padding: 15px;
+    }
+    .about-container h1 {
+        font-size: 2.2rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .about-container {
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .about-container h1 {
+        font-size: 1.8rem;
+    }
+    .about-container p {
+        font-size: 1rem;
+    }
+}
+
+/* Optional: hide scrollbars if browser forces them */
+::-webkit-scrollbar {
+    display: none;
+}

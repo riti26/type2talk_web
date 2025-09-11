@@ -1,0 +1,27 @@
+{% extends "layouts/base_logged_in.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="settings-screen">
+  <h2>Settings</h2>
+
+  <div class="settings-section">
+    <div class="settings-item">
+        <a href="{{ url_for('main.profile') }}" class="settings-link">
+            <span class="settings-label">Profile</span>
+            <span class="chev">›</span>
+        </a>
+    </div>
+
+    <div class="settings-item">
+        <a href="{{ url_for('main.change_password') }}" class="settings-link">
+            <span class="settings-label">Change Password</span>
+            <span class="chev">›</span>
+        </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

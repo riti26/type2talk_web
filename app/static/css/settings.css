@@ -1,0 +1,39 @@
+.settings-screen {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 8px;
+  font-family: system-ui, sans-serif;
+}
+
+.settings-section {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.settings-item:last-child {
+  border-bottom: 0;
+}
+
+.settings-item:hover {
+  background: #f9f9f9;
+}
+
+.settings-label {
+  font-weight: 500;
+}
+
+.chev {
+  font-size: 14px;
+  color: #999;
+}

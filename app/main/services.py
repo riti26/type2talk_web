@@ -5,14 +5,15 @@ from db.user_session_dao import UserSessionDAO
 
 
 def get_category_data():
-    token = AppDataManager.load_session()
-    user_info = UserSessionDAO.get_user_info(token)
-    user_id = user_info["user_id"] if user_info else None
-
-    categories = CategoryDAO.get_all(user_id=user_id)
+    categories = CategoryDAO.get_all(get_user_id())
 
     return categories
 
 def get_communication_item(category_id):
     items = ItemDAO.get_by_category(category_id)
     return items
+
+def get_user_id():
+    token = AppDataManager.load_session()
+    user_info = UserSessionDAO.get_user_info(token)
+    return user_info["user_id"] if user_info else None

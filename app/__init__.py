@@ -40,7 +40,22 @@ def create_app():
     
     @app.context_processor
     def inject_main_toolbar():
-        return {"main_toolbar": MainToolbar()}
+        # Create the toolbar object
+        toolbar = MainToolbar()
+
+        token = AppDataManager.load_session()
+        username = "Guest"
+        # Load user info
+        if AppDataManager.load_session():
+            user_info = UserSessionDAO.get_user_info(token)
+            username = user_info["username"] if user_info else "Guest"
+
+        # Return both toolbar and username
+        return {
+            "main_toolbar": toolbar,
+            "username": username
+        }
+
 
     return app
 

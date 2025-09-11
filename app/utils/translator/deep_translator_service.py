@@ -2,6 +2,8 @@ from deep_translator import GoogleTranslator
 from concurrent.futures import ThreadPoolExecutor
 import threading
 
+from app.utils.add_data_manager import AppDataManager
+
 # Thread-safe cache for translations
 _translation_cache = {}
 _cache_lock = threading.Lock()
@@ -9,6 +11,8 @@ _cache_lock = threading.Lock()
 _executor = ThreadPoolExecutor(max_workers=4)
 
 def _translate_sync(text, target_lang="en"):
+    if target_lang == 'en':
+        return text
     try:
         # Check cache first
         key = (text, target_lang)
@@ -33,6 +37,8 @@ def translate_text_async(text, target_lang="en", callback=None):
     If callback is provided, call it with the translated text once ready.
     Returns a Future object.
     """
+    if target_lang == 'en':
+        return text
     future = _executor.submit(_translate_sync, text, target_lang)
     if callback:
         def _call_cb(fut):
@@ -42,7 +48,10 @@ def translate_text_async(text, target_lang="en", callback=None):
     return future
 
 def translate_to_english_sync(text):
+    currentLanguage = AppDataManager.get_language()
+    if currentLanguage == 'en':
+        return text
     try:
-        return GoogleTranslator(source='auto', target='en').translate(text)
+        return GoogleTranslator(currentLanguage, target='en').translate(text)
     except Exception as e:
         return f"Error: {e}"
