@@ -56,14 +56,14 @@ class UserSessionDAO:
         with get_connection() as conn:
          cursor = conn.cursor()
          cursor.execute("""
-            SELECT u.user_id, u.username
+            SELECT u.user_id, u.username, u.email
             FROM users u
             JOIN user_sessions s ON u.user_id = s.user_id
             WHERE s.session_token = ?
         """, (token,))
         row = cursor.fetchone()
         if row:
-            return {"user_id": row[0], "username": row[1]}
+            return {"user_id": row[0], "username": row[1], "email": row[2]}
         return None
 
     @staticmethod

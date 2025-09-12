@@ -83,16 +83,46 @@ class UserDAO:
         return None
 
     @staticmethod
-    def update(user: User):
+    def update(user: User) -> bool:
+        """
+        Update a user's profile. Ensures username and email are unique.
+        Returns True if update succeeded, False if username/email already taken.
+        """
         conn = get_connection()
         cursor = conn.cursor()
+
+        # 1. Check if username is taken by another user
         cursor.execute("""
-            UPDATE users
-            SET username = ?, email = ?, language = ?
-            WHERE user_id = ?
-        """, (user.username, user.email, user.language, user.user_id))
-        conn.commit()
-        conn.close()
+            SELECT user_id FROM users WHERE username = ? AND user_id != ?
+        """, (user.username, user.user_id))
+        if cursor.fetchone():
+            conn.close()
+            print("[Update Error] Username already taken")
+            return False
+
+        # 2. Check if email is taken by another user
+        cursor.execute("""
+            SELECT user_id FROM users WHERE email = ? AND user_id != ?
+        """, (user.email, user.user_id))
+        if cursor.fetchone():
+            conn.close()
+            print("[Update Error] Email already taken")
+            return False
+
+        # 3. Perform the update
+        try:
+            cursor.execute("""
+                UPDATE users
+                SET username = ?, email = ?
+                WHERE user_id = ?
+            """, (user.username, user.email, user.user_id))
+            conn.commit()
+            return True
+        except IntegrityError as e:
+            print(f"[Update Error] {e}")
+            return False
+        finally:
+            conn.close()
     
     @staticmethod
     def update_language(user_id, language):

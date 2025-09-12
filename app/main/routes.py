@@ -9,6 +9,7 @@ from db.user_session_dao import UserSessionDAO
 from app.utils.add_data_manager import AppDataManager
 from app.utils.translator.deep_translator_service import translate_text_async, _translate_sync
 from app.forms.main_forms import ChangePasswordForm
+from app.models.user import User
 
 main_bp = Blueprint("main", __name__, url_prefix="/main")
 
@@ -115,11 +116,29 @@ def change_password():
                 flash(message, "danger")
     return render_template("main/change_password.html", form=form)
 
-@main_bp.route("/profile")
+@main_bp.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-    data = ""
-    return render_template("main/profile.html", data=data)
+    token = AppDataManager.load_session()
+    user = None
+    if token:
+        user = UserSessionDAO.get_user_info(token)
+
+    if request.method == "POST":
+        new_username = request.form.get("username")
+        new_email = request.form.get("email")
+
+        updated_user = User(user_id=user["user_id"], username=new_username, email=new_email)
+        success = UserDAO.update(updated_user)
+
+        if not success:
+            flash("Username or email already exists. Please choose another.", "danger")
+            return redirect(url_for("main.profile"))
+
+        flash("Profile updated successfully!", "success")
+        return redirect(url_for("main.profile"))
+
+    return render_template("main/profile.html", user=user)
 
 @main_bp.route("/about")
 @login_required

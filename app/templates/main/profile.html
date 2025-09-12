@@ -1,1 +1,51 @@
-<h1>cdc</h1>
+{% extends "layouts/base_logged_in.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main_toolbar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<nav class="nav-bar">
+    <div class="nav-title">Settings</div>
+        <!-- Show back button on all other routes -->
+        <a class="menu-btn" href="{{ url_for('main.settings') }}">
+            <span><i class="fa fa-arrow-circle-left"></i></span>
+        </a>
+</nav>
+
+<div class="profile-container">
+    <h2>My Profile</h2>
+
+    <!-- Avatar section -->
+    <div class="avatar-container">
+        <img src="{{ url_for('static', filename='images/avatar.png') }}" 
+             alt="User Avatar" class="avatar-img">
+    </div>
+
+    <form method="POST" class="profile-form">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" name="username" value="{{ user.username }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" name="email" value="{{ user.email }}" required>
+        </div>
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+
+{% endblock %}
