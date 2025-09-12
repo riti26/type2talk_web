@@ -1,5 +1,5 @@
 // edit.js
-import { selectedCards, cardType } from "./actions_toolbar.js";
+import { selectedCards } from "./actions_toolbar.js";
 import { updateActionsToolbarIcon, getScreenName } from "./utils.js";
 
 export function initEdit() {

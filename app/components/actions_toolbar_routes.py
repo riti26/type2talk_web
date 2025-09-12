@@ -72,11 +72,12 @@ def edit_selected():
         category = CategoryDAO.get_by_id(item_id)
         if not category:
             return jsonify({"success": False, "error": "Category not found"})
-        icon_path = category.icon_path  # default to existing icon path
-
-        # ---------------- Handle file upload ----------------
-        if icon_file and icon_file.filename != "":
+        
+        if(icon_file):
+            # ---------------- Handle file upload ----------------
             icon_path = handle_file_upload(icon_file)
+        else:
+            icon_path = category.icon_path  # default to existing icon path
 
         updatedCategory = CategoryDAO.update(
             category_id=category.category_id,
@@ -99,11 +100,11 @@ def edit_selected():
         item = ItemDAO.get_by_id(item_id)
         if not item:
             return jsonify({"success": False, "error": "Item not found"})
-        icon_path = item.icon_path  # default to existing icon path
-
-        # ---------------- Handle file upload ----------------
-        if icon_file and icon_file.filename != "":
+        if(icon_file):
+            # ---------------- Handle file upload ----------------
             icon_path = handle_file_upload(icon_file)
+        else:
+            icon_path = item.icon_path  # default to existing icon path
 
         updatedCommunicationItem = ItemDAO.update(
             item_id=item.item_id,
@@ -138,9 +139,7 @@ def add_item():
 
     # ---------------- Handle file upload ----------------
     icon_file = request.files.get("icon")
-    icon_path = None
-    if icon_file and icon_file.filename != "":
-        icon_path = handle_file_upload(icon_file)
+    icon_path = handle_file_upload(icon_file)
 
     if not text:
         return jsonify({"success": False, "error": "Category name required"})
@@ -184,9 +183,7 @@ def add_communication_item():
     icon_file = request.files.get("icon")
 
     # Save icon file
-    icon_path = None
-    if icon_file and icon_file.filename != "":
-        icon_path = handle_file_upload(icon_file)
+    icon_path = handle_file_upload(icon_file)
 
     # Add item to DB
     item = ItemDAO.add(

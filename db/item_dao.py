@@ -11,7 +11,7 @@ class ItemDAO:
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO communication_item (category_id, text, icon_path)
-            VALUES (?, ?, ?, ?)
+            VALUES (?, ?, ?)
         """, (category_id, text, icon_path))
 
         item_id = cursor.lastrowid

@@ -1,6 +1,6 @@
 // delete.js
-import { selectedCards, cardType } from "./actions_toolbar.js";
-import { updateActionsToolbarIcon } from "./utils.js";
+import { selectedCards } from "./actions_toolbar.js";
+import { updateActionsToolbarIcon, getScreenName } from "./utils.js";
 
 export function initDelete() {
     const deleteForm = document.querySelector('form[action$="delete_selected"]');
@@ -19,7 +19,7 @@ export function initDelete() {
             fetch("/actions_toolbar/delete_selected", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ cardType: cardType, selected_items: Array.from(selectedCards) })
+                body: JSON.stringify({ cardType: getScreenName() == "home" ? "category" : "communication_items", selected_items: Array.from(selectedCards) })
             })
             .then(res => res.json())
             .then(data => {

@@ -11,7 +11,7 @@ class CategoryDAO:
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO communication_category (text, user_id, icon_path, is_standalone)
-            VALUES (?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?)
         """, (text, user_id, icon_path, int(is_standalone)))
 
         category_id = cursor.lastrowid
@@ -31,7 +31,7 @@ class CategoryDAO:
                 text=row[1],
                 user_id=row[2],
                 icon_path=row[3],
-                is_standalone=bool(row[5])
+                is_standalone=bool(row[4])
             )
         return None
 
@@ -78,7 +78,7 @@ class CategoryDAO:
                 text=row[1],
                 user_id=row[2],
                 icon_path=row[3],
-                is_standalone=bool(row[5])
+                is_standalone=bool(row[4])
             )
         return None
 
@@ -150,6 +150,6 @@ class CategoryDAO:
                 text=row[1],
                 user_id=row[2],
                 icon_path=row[3],
-                is_standalone=bool(row[5])
+                is_standalone=bool(row[4])
             )
         return None
