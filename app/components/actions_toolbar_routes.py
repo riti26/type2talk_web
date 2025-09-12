@@ -2,6 +2,7 @@ import os
 from flask import Blueprint, jsonify, redirect, render_template, render_template_string, session, url_for, request, flash
 from werkzeug.utils import secure_filename
 from app.models.card_items import CardItem
+from app.components.services import handle_file_upload
 from db.category_dao import CategoryDAO
 from db.item_dao import ItemDAO
 from app.decorators import login_required
@@ -55,9 +56,8 @@ def delete_selected():
 def edit_selected():
     cardData: CardItem = None
     item_id = request.form.get("selected_item")
-    name = request.form.get("name")
-    item_type = request.form.get("type", None)  
-    description = request.form.get("description")
+    text = request.form.get("name")
+    item_type = request.form.get("type", None) 
     icon_file = request.files.get("icon")
 
     if not item_id:
@@ -76,17 +76,11 @@ def edit_selected():
 
         # ---------------- Handle file upload ----------------
         if icon_file and icon_file.filename != "":
-            filename = secure_filename(icon_file.filename)
-            save_folder = os.path.join("app", "static", "images")
-            os.makedirs(save_folder, exist_ok=True)
-            save_path = os.path.join(save_folder, filename)
-            icon_file.save(save_path)
-            icon_path = f"images/{filename}"
+            icon_path = handle_file_upload(icon_file)
 
         updatedCategory = CategoryDAO.update(
             category_id=category.category_id,
-            name=name or category.name,
-            description=description or category.description,
+            text=text or category.text,
             is_standalone=category.is_standalone,
             icon_path=icon_path,
         )
@@ -96,7 +90,7 @@ def edit_selected():
             cardData = CardItem(
                 id=category.category_id,
                 type="category",
-                text=name,
+                text=text,
                 image_source=updatedCategory.icon_path,
                 is_standalone=updatedCategory.is_standalone,
             )
@@ -109,18 +103,12 @@ def edit_selected():
 
         # ---------------- Handle file upload ----------------
         if icon_file and icon_file.filename != "":
-            filename = secure_filename(icon_file.filename)
-            save_folder = os.path.join("app", "static", "images")
-            os.makedirs(save_folder, exist_ok=True)
-            save_path = os.path.join(save_folder, filename)
-            icon_file.save(save_path)
-            icon_path = f"images/{filename}"
+            icon_path = handle_file_upload(icon_file)
 
         updatedCommunicationItem = ItemDAO.update(
             item_id=item.item_id,
-            text=name or item.text,
-            icon_path=icon_path,
-            audio_path=description or item.audio_path
+            text=text or item.text,
+            icon_path=icon_path
         )
         if not updatedCommunicationItem:
             return jsonify({"success": False, "error": "Failed to update item"})
@@ -128,7 +116,7 @@ def edit_selected():
             cardData = CardItem(
                 id=updatedCommunicationItem.item_id,
                 type="communication_items",
-                text=name,
+                text=text,
                 image_source=updatedCommunicationItem.icon_path,
                 is_standalone=True,
             )
@@ -145,31 +133,24 @@ def edit_selected():
 @actions_toolbar_bp.route("/add_item", methods=["POST"])
 @login_required
 def add_item():
-    name = request.form.get("name")
-    description = request.form.get("description")
+    text = request.form.get("name")
     is_standalone = request.form.get("is_standalone") == "1"
 
     # ---------------- Handle file upload ----------------
     icon_file = request.files.get("icon")
     icon_path = None
     if icon_file and icon_file.filename != "":
-        filename = secure_filename(icon_file.filename)
-        save_folder = os.path.join("app", "static", "images")
-        os.makedirs(save_folder, exist_ok=True)
-        save_path = os.path.join(save_folder, filename)
-        icon_file.save(save_path)
-        icon_path = f"images/{filename}"
+        icon_path = handle_file_upload(icon_file)
 
-    if not name:
+    if not text:
         return jsonify({"success": False, "error": "Category name required"})
 
     try:
         # ---------------- Create category ----------------
         category = CategoryDAO.add(
-            name=name,
+            text=text,
             user_id=get_user_id(),
             icon_path=icon_path,
-            description=description,
             is_standalone=is_standalone
         )
         if not category:
@@ -181,7 +162,7 @@ def add_item():
     cardData: CardItem = CardItem(
         id=category.category_id,
         type="category",
-        text=name,
+        text=text,
         image_source=category.icon_path,
         is_standalone=category.is_standalone,
     )
@@ -199,23 +180,18 @@ def add_communication_item():
     if not category_id:
         return jsonify({"success": False, "error": "Missing category ID"})
 
-    name = request.form.get("name")
+    text = request.form.get("name")
     icon_file = request.files.get("icon")
 
     # Save icon file
     icon_path = None
     if icon_file and icon_file.filename != "":
-        filename = secure_filename(icon_file.filename)
-        save_folder = os.path.join("app", "static", "images")
-        os.makedirs(save_folder, exist_ok=True)
-        save_path = os.path.join(save_folder, filename)
-        icon_file.save(save_path)
-        icon_path = f"images/{filename}"
+        icon_path = handle_file_upload(icon_file)
 
     # Add item to DB
     item = ItemDAO.add(
         category_id=int(category_id),
-        text=name,
+        text=text,
         icon_path=icon_path
     )
 
@@ -223,7 +199,7 @@ def add_communication_item():
     cardData = CardItem(
         id=item.item_id,
         type="item",
-        text=name,
+        text=text,
         image_source=item.icon_path,
         is_standalone=True
     )
@@ -231,5 +207,3 @@ def add_communication_item():
     html = render_template_string(macro_template, item=cardData)
 
     return jsonify({"success": True, "html": html})
-
-

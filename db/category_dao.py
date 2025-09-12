@@ -5,20 +5,20 @@ from db.connection import get_connection
 
 class CategoryDAO:
     @staticmethod
-    def add(name, user_id=None, icon_path=None, description=None, is_standalone=False):
-        name = translate_to_english_sync(name)
+    def add(text, user_id=None, icon_path=None, is_standalone=False):
+        text = translate_to_english_sync(text)
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO communication_category (name, user_id, icon_path, description, is_standalone)
+            INSERT INTO communication_category (text, user_id, icon_path, is_standalone)
             VALUES (?, ?, ?, ?, ?)
-        """, (name, user_id, icon_path, description, int(is_standalone)))
+        """, (text, user_id, icon_path, int(is_standalone)))
 
         category_id = cursor.lastrowid
         conn.commit()
 
         cursor.execute("""
-            SELECT category_id, name, user_id, icon_path, description, is_standalone
+            SELECT category_id, text, user_id, icon_path, is_standalone
             FROM communication_category
             WHERE category_id = ?
         """, (category_id,))
@@ -28,10 +28,9 @@ class CategoryDAO:
         if row:
             return CommunicationCategory(
                 category_id=row[0],
-                name=row[1],
+                text=row[1],
                 user_id=row[2],
                 icon_path=row[3],
-                description=row[4],
                 is_standalone=bool(row[5])
             )
         return None
@@ -51,10 +50,9 @@ class CategoryDAO:
         for row in rows:
             category = CommunicationCategory(
                 category_id=row["category_id"],
-                name=row["name"],
+                text=row["text"],
                 user_id=row["user_id"],
                 icon_path=row["icon_path"],
-                description=row["description"],
                 is_standalone=bool(row["is_standalone"])
             )
             categories.append(category)
@@ -67,7 +65,7 @@ class CategoryDAO:
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT category_id, name, user_id, icon_path, description, is_standalone
+            SELECT category_id, text, user_id, icon_path, is_standalone
             FROM communication_category
             WHERE category_id = ?
         """, (category_id,))
@@ -77,10 +75,9 @@ class CategoryDAO:
         if row:
             return CommunicationCategory(
                 category_id=row[0],
-                name=row[1],
+                text=row[1],
                 user_id=row[2],
                 icon_path=row[3],
-                description=row[4],
                 is_standalone=bool(row[5])
             )
         return None
@@ -114,33 +111,33 @@ class CategoryDAO:
         conn.close()
 
     @staticmethod
-    def update(category_id: int, name: str, icon_path: str = None,
-               description: str = None, is_standalone: bool = False):
+    def update(category_id: int, text: str, icon_path: str = None,
+               is_standalone: bool = False):
         """
         Update category. If icon_path is None, keep the existing value.
         """
-        name = translate_to_english_sync(name)
+        text = translate_to_english_sync(text)
         conn = get_connection()
         cursor = conn.cursor()
 
         if icon_path is None:
             cursor.execute("""
                 UPDATE communication_category
-                SET name = ?, description = ?, is_standalone = ?
+                SET text = ?, is_standalone = ?
                 WHERE category_id = ?
-            """, (name, description, int(is_standalone), category_id))
+            """, (text, int(is_standalone), category_id))
         else:
             cursor.execute("""
                 UPDATE communication_category
-                SET name = ?, icon_path = ?, description = ?, is_standalone = ?
+                SET text = ?, icon_path = ?, is_standalone = ?
                 WHERE category_id = ?
-            """, (name, icon_path, description, int(is_standalone), category_id))
+            """, (text, icon_path, int(is_standalone), category_id))
 
         conn.commit()
 
         # fetch the updated row
         cursor.execute("""
-            SELECT category_id, name, user_id, icon_path, description, is_standalone
+            SELECT category_id, text, user_id, icon_path, is_standalone
             FROM communication_category
             WHERE category_id = ?
         """, (category_id,))
@@ -150,10 +147,9 @@ class CategoryDAO:
         if row:
             return CommunicationCategory(
                 category_id=row[0],
-                name=row[1],
+                text=row[1],
                 user_id=row[2],
                 icon_path=row[3],
-                description=row[4],
                 is_standalone=bool(row[5])
             )
         return None

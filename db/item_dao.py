@@ -5,20 +5,20 @@ from db.connection import get_connection
 class ItemDAO:
 
     @staticmethod
-    def add(category_id, text, icon_path=None, audio_path=None):
+    def add(category_id, text, icon_path=None):
         text = translate_to_english_sync(text)
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO communication_item (category_id, label, icon_path, audio_path)
+            INSERT INTO communication_item (category_id, text, icon_path)
             VALUES (?, ?, ?, ?)
-        """, (category_id, text, icon_path, audio_path))
+        """, (category_id, text, icon_path))
 
         item_id = cursor.lastrowid
         conn.commit()
 
         cursor.execute("""
-            SELECT item_id, category_id, label, icon_path, audio_path
+            SELECT item_id, category_id, text, icon_path
             FROM communication_item
             WHERE item_id = ?
         """, (item_id,))
@@ -30,8 +30,7 @@ class ItemDAO:
                 item_id=row[0],
                 category_id=row[1],
                 text=row[2],
-                icon_path=row[3],
-                audio_path=row[4]
+                icon_path=row[3]
             )
         return None
 
@@ -49,8 +48,7 @@ class ItemDAO:
                 item_id=row[0],
                 category_id=row[1],
                 text=row[2],
-                icon_path=row[3],
-                audio_path=row[4]
+                icon_path=row[3]
             )
             items.append(item)
 
@@ -72,8 +70,7 @@ class ItemDAO:
         conn.close()
 
     @staticmethod
-    def update(item_id: int, text: str, icon_path: str = None,
-               audio_path: str = None) -> CommunicationItem | None:
+    def update(item_id: int, text: str, icon_path: str = None) -> CommunicationItem | None:
         """
         Update communication item. If icon_path is None, keep the existing value.
         """
@@ -84,22 +81,20 @@ class ItemDAO:
         if icon_path is None:
             cursor.execute("""
                 UPDATE communication_item
-                SET label = ?, audio_path = ?
+                SET text = ?
                 WHERE item_id = ?
             """, (
                 text,
-                audio_path,
                 item_id
             ))
         else:
             cursor.execute("""
                 UPDATE communication_item
-                SET label = ?, icon_path = ?, audio_path = ?
+                SET text = ?, icon_path = ?
                 WHERE item_id = ?
             """, (
                 text,
                 icon_path,
-                audio_path,
                 item_id
             ))
 
@@ -118,8 +113,7 @@ class ItemDAO:
                 item_id=row[0],
                 category_id=row[1],
                 text=row[2],
-                icon_path=row[3],
-                audio_path=row[4]
+                icon_path=row[3]
             )
         return None
 
@@ -128,7 +122,7 @@ class ItemDAO:
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT item_id, category_id, label, icon_path, audio_path
+            SELECT item_id, category_id, text, icon_path
             FROM communication_item
             WHERE item_id = ?
         """, (item_id,))
@@ -140,7 +134,6 @@ class ItemDAO:
                 item_id=row[0],
                 category_id=row[1],
                 text=row[2],
-                icon_path=row[3],
-                audio_path=row[4]
+                icon_path=row[3]
             )
         return None

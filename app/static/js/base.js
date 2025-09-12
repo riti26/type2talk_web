@@ -20,4 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
     initMainToolbar();
     initLanguage();
     initProfile();
+    const loader = document.getElementById("loader");
+    if(loader) {
+        loader.style.display = "none"; // Hide loader once content is loaded
+    }
 });

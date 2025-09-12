@@ -2,7 +2,6 @@
 .about-screen {
     display: flex;
     flex-direction: column;
-    height: 100vh;
     overflow: hidden; /* prevents scrollbars */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f0f2f5;

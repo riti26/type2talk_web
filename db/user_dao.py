@@ -38,7 +38,7 @@ class UserDAO:
 
                 # 2) Fetch default categories (user_id IS NULL)
                 cursor.execute("""
-                    SELECT category_id, name, icon_path, description, is_standalone
+                    SELECT category_id, text, icon_path, is_standalone
                     FROM communication_category
                     WHERE user_id IS NULL
                 """)
@@ -48,22 +48,21 @@ class UserDAO:
                 #    then immediately copy its items and map them to the new category id.
                 for cat in default_categories:
                     old_cat_id = cat[0]
-                    name = cat[1]
+                    text = cat[1]
                     icon_path = cat[2]
-                    description = cat[3]
-                    is_standalone = cat[4]
+                    is_standalone = cat[3]
 
                     # insert category copy for this user
                     cursor.execute("""
-                        INSERT INTO communication_category (name, user_id, icon_path, description, is_standalone)
-                        VALUES (?, ?, ?, ?, ?)
-                    """, (name, user_id, icon_path, description, is_standalone))
+                        INSERT INTO communication_category (text, user_id, icon_path, is_standalone)
+                        VALUES (?, ?, ?, ?)
+                    """, (text, user_id, icon_path, is_standalone))
                     new_cat_id = cursor.lastrowid
 
                     # copy items for this specific default category (old_cat_id -> new_cat_id)
                     # adjust selected columns if communication_item has more fields
                     cursor.execute("""
-                        SELECT category_id, label, icon_path, audio_path
+                        SELECT category_id, text, icon_path
                         FROM communication_item
                         WHERE category_id = ?
                     """, (old_cat_id,))
@@ -71,13 +70,12 @@ class UserDAO:
 
                     for item in items:
                         category_id = new_cat_id
-                        label = item[1]
+                        text = item[1]
                         icon_path = item[2]
-                        audio_path = item[3]
                         cursor.execute("""
-                            INSERT INTO communication_item (category_id, label, icon_path, audio_path)
-                            VALUES (?, ?, ?, ?)
-                        """, (category_id, label, icon_path, audio_path))
+                            INSERT INTO communication_item (category_id, text, icon_path)
+                            VALUES (?, ?, ?)
+                        """, (category_id, text, icon_path))
 
                 # commit everything once
                 conn.commit()

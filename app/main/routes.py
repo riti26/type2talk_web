@@ -7,7 +7,7 @@ from db.language_dao import LanguageDAO
 from db.user_dao import UserDAO
 from db.user_session_dao import UserSessionDAO
 from app.utils.add_data_manager import AppDataManager
-from app.utils.translator.deep_translator_service import translate_text_async, _translate_sync
+from app.utils.translator.deep_translator_service import _translate_sync
 from app.forms.main_forms import ChangePasswordForm
 from app.models.user import User
 
@@ -24,7 +24,7 @@ def home():# Reset toolbar on entering Home
     cardData: list[CardItem] = []
     for item in categories:
         translated_text = _translate_sync(  # <-- use sync translation
-            item.name,
+            item.text,
             AppDataManager.get_language()
         )
         cardData.append(

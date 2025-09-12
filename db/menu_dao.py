@@ -8,7 +8,7 @@ class MenuDAO:
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, name, text, icon, viewclass, parent_id FROM menu ORDER BY id"
+            "SELECT id, name, text, icon, parent_id FROM menu ORDER BY id"
         )
         rows = cursor.fetchall()
         conn.close()
@@ -20,7 +20,7 @@ class MenuDAO:
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT id, name, text, icon, viewclass, parent_id
+            SELECT id, name, text, icon, parent_id
             FROM menu
             WHERE parent_id IS NULL
             ORDER BY id
@@ -35,7 +35,7 @@ class MenuDAO:
         conn = get_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, name, text, icon, viewclass, parent_id FROM menu WHERE parent_id = ? ORDER BY id",
+            "SELECT id, name, text, icon, parent_id FROM menu WHERE parent_id = ? ORDER BY id",
             (parent_id,)
         )
         rows = cursor.fetchall()
