@@ -13,3 +13,14 @@ def login_required(f):
             return redirect(url_for("auth.login"))
         return f(*args, **kwargs)
     return decorated_function
+
+def logged_out_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        session_token = session.get("session_token")  # directly from Flask session
+        user_session = UserSessionDAO.get_session(session_token)
+        if user_session:
+            flash("Please log in to access this page.", "warning")
+            return redirect(url_for("main.home"))
+        return f(*args, **kwargs)
+    return decorated_function

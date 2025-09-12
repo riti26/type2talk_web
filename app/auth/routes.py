@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
-from app.decorators import login_required
+from flask import Blueprint, make_response, render_template, redirect, url_for, flash
+from app.decorators import logged_out_required, login_required
 from app.forms.auth_forms import ForgotPasswordForm, LoginForm, SignupForm
 from app.utils.add_data_manager import AppDataManager
 from app.utils.email.smtp_service import send_email
@@ -10,6 +10,7 @@ from db.user_session_dao import UserSessionDAO
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 @auth_bp.route("/login", methods=["GET", "POST"])
+@logged_out_required
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -28,9 +29,14 @@ def login():
         # login successful
         return redirect(url_for("main.home"))
 
-    return render_template("auth/login.html", form=form)
+    response = make_response(render_template("auth/login.html", form=form))
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 @auth_bp.route("/signup", methods=["GET", "POST"])
+@logged_out_required
 def signup():
     form = SignupForm()
     if form.validate_on_submit():
@@ -45,6 +51,7 @@ def signup():
     return render_template("auth/signup.html", form=form)
 
 @auth_bp.route("/forgot_password", methods=["GET", "POST"])
+@logged_out_required
 def forgot_password():
     form = ForgotPasswordForm()
     if form.validate_on_submit():
