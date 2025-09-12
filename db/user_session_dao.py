@@ -4,6 +4,7 @@ from typing import Optional
 from app.models.user_session import UserSession
 from app.utils.add_data_manager import AppDataManager
 from db.connection import get_connection
+from app.models.user import User
 
 class UserSessionDAO:
     @staticmethod
@@ -56,14 +57,19 @@ class UserSessionDAO:
         with get_connection() as conn:
          cursor = conn.cursor()
          cursor.execute("""
-            SELECT u.user_id, u.username, u.email
+            SELECT u.user_id, u.username, u.email, u.language
             FROM users u
             JOIN user_sessions s ON u.user_id = s.user_id
             WHERE s.session_token = ?
         """, (token,))
         row = cursor.fetchone()
         if row:
-            return {"user_id": row[0], "username": row[1], "email": row[2]}
+            return User(
+                user_id=row[0],
+                username=row[1],
+                email=row[2],
+                language=row[3]
+            )
         return None
 
     @staticmethod

@@ -48,7 +48,7 @@ def create_app():
         # Load user info
         if AppDataManager.load_session():
             user_info = UserSessionDAO.get_user_info(token)
-            username = user_info["username"] if user_info else "Guest"
+            username = user_info.username if user_info else "Guest"
 
         # Return both toolbar and username
         return {

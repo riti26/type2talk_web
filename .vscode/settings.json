@@ -3,5 +3,14 @@
         "./src",
         "./helpers",
         "./app"
+    ],
+    "sqltools.useNodeRuntime": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:type2talk_web}/db/database.db",
+            "name": "type2talk"
+        }
     ]
 }

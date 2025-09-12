@@ -1,5 +1,5 @@
 from flask import Blueprint, make_response, render_template, redirect, url_for, flash
-from app.decorators import logged_out_required, login_required
+from app.decorators import logged_out_required, no_cache
 from app.forms.auth_forms import ForgotPasswordForm, LoginForm, SignupForm
 from app.utils.add_data_manager import AppDataManager
 from app.utils.email.smtp_service import send_email
@@ -11,6 +11,7 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 @logged_out_required
+@no_cache
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -29,21 +30,17 @@ def login():
         # login successful
         return redirect(url_for("main.home"))
 
-    response = make_response(render_template("auth/login.html", form=form))
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
-    return response
+    return render_template("auth/login.html", form=form)
 
 @auth_bp.route("/signup", methods=["GET", "POST"])
 @logged_out_required
+@no_cache
 def signup():
     form = SignupForm()
     if form.validate_on_submit():
         try:
             UserDAO.register_user(form.username.data, form.email.data, form.password.data)
             flash("Account created! Please log in.", "success")
-            return redirect(url_for("auth.login"))
         except UsernameExistsError:
             form.username.errors.append("Username already exists!")
         except EmailExistsError:
@@ -52,6 +49,7 @@ def signup():
 
 @auth_bp.route("/forgot_password", methods=["GET", "POST"])
 @logged_out_required
+@no_cache
 def forgot_password():
     form = ForgotPasswordForm()
     if form.validate_on_submit():

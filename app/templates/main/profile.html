@@ -3,6 +3,7 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main_toolbar.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/popup.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -44,8 +45,15 @@
             <input type="email" name="email" value="{{ user.email }}" required>
         </div>
 
-        <button type="submit">Save Changes</button>
+        <div class="form-buttons">
+            <button type="submit">Save Changes</button>
+            <button type="reset">Reset</button> <!-- discards unsaved changes -->
+        </div>
     </form>
+
+    <!-- Trigger button -->
+    <button type="button" class="delete-btn" data-modal="deleteModal">Delete Profile</button>
+    {% include "components/confirm_delete_modal.html" %}
 </div>
 
 {% endblock %}

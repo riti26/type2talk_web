@@ -1,0 +1,13 @@
+<!-- Modal popup -->
+<div id="deleteModal" class="modal">
+  <div class="popup-container">
+    <h3 class="popup-title">Confirm Delete</h3>
+    <p class="popup-message">Are you sure you want to delete your profile? This action cannot be undone.</p>
+    <div class="popup-actions">
+      <form method="POST" action="{{ url_for('main.delete_profile') }}">
+        <button type="submit" class="submit-btn">Yes, Delete</button>
+        <button type="button" class="cancel-btn">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

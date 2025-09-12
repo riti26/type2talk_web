@@ -14,6 +14,20 @@
     color: #1976d2;
 }
 
+.avatar-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #1976d2;
+}
+
 .profile-form .form-group {
     margin-bottom: 15px;
 }
@@ -32,39 +46,61 @@
     font-size: 1rem;
 }
 
-.profile-form button {
-    display: block;
-    width: 100%;
-    background: #1976d2;
-    color: white;
-    border: none;
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.form-buttons button {
+    flex: 1;
     padding: 12px;
     font-size: 1rem;
     border-radius: 6px;
     cursor: pointer;
+    border: none;
+    transition: background 0.3s;
 }
 
-.profile-form button:hover {
-    background: #145ca4;
+.form-buttons button[type="submit"] {
+    background-color: #1976d2;
+    color: white;
 }
 
-.avatar-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+.form-buttons button[type="submit"]:hover {
+    background-color: #145ca4;
 }
 
-.avatar-img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #1976d2;
+.form-buttons button[type="reset"] {
+    background-color: #6395ac;
+    color: #fff;
 }
 
+.form-buttons button[type="reset"]:hover {
+    background-color: #aaaaaa;
+}
+
+/* Delete profile button */
+.delete-btn {
+    width: 100%;
+    margin: 20px 0px;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    background-color: #e74c3c; /* red */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Flash messages */
 .flash-messages {
-    margin: 15px auto;
-    max-width: 500px;
+    margin-bottom: 15px;
 }
 
 .alert {
@@ -84,4 +120,10 @@
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    margin: auto;
+  }
 }

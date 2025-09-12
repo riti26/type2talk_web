@@ -7,6 +7,7 @@ import { initEdit } from "./item_edit.js";
 import { renderPhraseToolbar, initPhraseToolbar } from "./phrase_toolbar.js";
 import { initMainToolbar } from "./main_toolbar.js";
 import { initLanguage } from "./language.js";
+import { initProfile } from "./profile.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     initActionsToolbar();
@@ -18,4 +19,5 @@ document.addEventListener("DOMContentLoaded", function () {
     renderPhraseToolbar();
     initMainToolbar();
     initLanguage();
+    initProfile();
 });

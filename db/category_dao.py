@@ -42,7 +42,7 @@ class CategoryDAO:
         cursor = conn.cursor()
         cursor.execute("""
             SELECT * FROM communication_category
-            WHERE user_id = ? OR user_id IS NULL
+            WHERE user_id = ?
         """, (user_id,))
         rows = cursor.fetchall()
         conn.close()

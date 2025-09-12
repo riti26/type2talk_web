@@ -1,6 +1,6 @@
-from flask import Blueprint, flash, jsonify, redirect, render_template, session, url_for
+from flask import Blueprint, flash, jsonify, redirect, render_template, session, url_for, request
 
-from app.decorators import login_required
+from app.decorators import login_required, no_cache
 from app.main.services import get_communication_item, get_category_data, get_user_id
 from app.models.card_items import CardItem
 from db.language_dao import LanguageDAO
@@ -15,11 +15,12 @@ main_bp = Blueprint("main", __name__, url_prefix="/main")
 
 @main_bp.route("/home")
 @login_required
+@no_cache
 def home():# Reset toolbar on entering Home
     session["toolbar_expanded"] = False
     categories = get_category_data()
     user_info = UserSessionDAO.get_user_info(AppDataManager.load_session())
-    username = user_info["username"] if user_info else "Guest"
+    username = user_info.username if user_info else "Guest"
     cardData: list[CardItem] = []
     for item in categories:
         translated_text = _translate_sync(  # <-- use sync translation
@@ -76,7 +77,6 @@ def settings():
 def language():
     all_languages = LanguageDAO.get_all()  # fetch all languages
     return render_template("main/language.html", languages=all_languages)
-    
 
 @main_bp.route("/logout", methods=["GET", "POST"])
 @login_required
@@ -85,8 +85,6 @@ def logout():
     if UserSessionDAO.logout(token):
         return jsonify({"logged_out": True})
     return jsonify({"logged_out": False})
-
-from flask import session, jsonify, request
 
 @main_bp.route("/select-language", methods=["POST"])
 @login_required
@@ -128,7 +126,7 @@ def profile():
         new_username = request.form.get("username")
         new_email = request.form.get("email")
 
-        updated_user = User(user_id=user["user_id"], username=new_username, email=new_email)
+        updated_user = User(user_id=user.user_id, username=new_username, email=new_email)
         success = UserDAO.update(updated_user)
 
         if not success:
@@ -144,3 +142,19 @@ def profile():
 @login_required
 def about():
     return render_template("main/about.html")
+
+@main_bp.route("/delete-profile", methods=["POST"])
+@login_required
+def delete_profile():
+    token = AppDataManager.load_session()
+    if token:
+        user_id = get_user_id()
+        if user_id:
+            # delete user from DB
+            result = UserDAO.delete(user_id)
+            if result:
+                AppDataManager.clear_session()
+                flash("Profile deleted successfully.", "success")
+                return redirect(url_for("auth.login"))
+    flash("Unable to delete profile.", "danger")
+    return redirect(url_for("main.profile"))

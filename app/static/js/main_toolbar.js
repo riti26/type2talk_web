@@ -16,8 +16,10 @@ export function initMainToolbar(){
 
     // Close menu if clicking outside
     document.addEventListener('click', (e) => {
-        if (!menuContent.contains(e.target) && e.target !== menu) {
-            menuContent.classList.remove('active');
+        if(menuContent){
+            if (!menuContent.contains(e.target) && e.target !== menu) {
+                menuContent.classList.remove('active');
+            }
         }
     });
 

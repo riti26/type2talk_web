@@ -12,12 +12,12 @@ class UsernameExistsError(Exception):
 class EmailExistsError(Exception):
     pass
 
-
 class UserDAO:
     @staticmethod
     def register_user(username: str, email: str, password: str):
         """
-        Registers a new user in the database.
+        Registers a new user in the database and copies default categories + items
+        for that user so they have their own editable copies.
         Raises:
             UsernameExistsError: if username is taken
             EmailExistsError: if email is already registered
@@ -28,11 +28,60 @@ class UserDAO:
         try:
             with get_connection() as conn:
                 cursor = conn.cursor()
+
+                # 1) Insert user
                 cursor.execute("""
                     INSERT INTO users (username, email, password, language)
                     VALUES (?, ?, ?, 'en')
                 """, (username, email, encrypt_password(password)))
+                user_id = cursor.lastrowid   # <-- the new user id we must use
+
+                # 2) Fetch default categories (user_id IS NULL)
+                cursor.execute("""
+                    SELECT category_id, name, icon_path, description, is_standalone
+                    FROM communication_category
+                    WHERE user_id IS NULL
+                """)
+                default_categories = cursor.fetchall()
+
+                # 3) For each default category: insert copy for this user,
+                #    then immediately copy its items and map them to the new category id.
+                for cat in default_categories:
+                    old_cat_id = cat[0]
+                    name = cat[1]
+                    icon_path = cat[2]
+                    description = cat[3]
+                    is_standalone = cat[4]
+
+                    # insert category copy for this user
+                    cursor.execute("""
+                        INSERT INTO communication_category (name, user_id, icon_path, description, is_standalone)
+                        VALUES (?, ?, ?, ?, ?)
+                    """, (name, user_id, icon_path, description, is_standalone))
+                    new_cat_id = cursor.lastrowid
+
+                    # copy items for this specific default category (old_cat_id -> new_cat_id)
+                    # adjust selected columns if communication_item has more fields
+                    cursor.execute("""
+                        SELECT category_id, label, icon_path, audio_path
+                        FROM communication_item
+                        WHERE category_id = ?
+                    """, (old_cat_id,))
+                    items = cursor.fetchall()
+
+                    for item in items:
+                        category_id = new_cat_id
+                        label = item[1]
+                        icon_path = item[2]
+                        audio_path = item[3]
+                        cursor.execute("""
+                            INSERT INTO communication_item (category_id, label, icon_path, audio_path)
+                            VALUES (?, ?, ?, ?)
+                        """, (category_id, label, icon_path, audio_path))
+
+                # commit everything once
                 conn.commit()
+                return user_id
 
         except IntegrityError as e:
             error_message = str(e).lower()
@@ -139,12 +188,32 @@ class UserDAO:
         conn.close()
 
     @staticmethod
-    def delete(user_id):
+    def delete(user_id: int):
+        """Delete a user and all related data in a single transaction."""
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
-        conn.commit()
-        conn.close()
+        
+        try:
+            # Enable foreign key constraints in SQLite
+            cursor.execute("PRAGMA foreign_keys = ON;")
+            
+            # 1. Delete related user sessions
+            cursor.execute("DELETE FROM user_sessions WHERE user_id = ?", (user_id,))
+            
+            # 2. Delete related categories
+            cursor.execute("DELETE FROM communication_category WHERE user_id = ?", (user_id,))
+            
+            # 4. Delete the user
+            cursor.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
+            
+            conn.commit()
+            return True
+        except Exception as e:
+            conn.rollback()
+            print(f"[Delete User Error] {e}")
+            return False
+        finally:
+            conn.close()
 
     @staticmethod
     def change_password(user_id, old_password, new_password):

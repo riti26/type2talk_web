@@ -10,7 +10,6 @@ body {
 
 .card {
     background: white;
-    width: 350px;
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0px 8px 20px rgba(96, 128, 255, 0.4);
@@ -18,7 +17,7 @@ body {
 }
 
 .title {
-    font-size: 36px;
+    font-size: 30px;
     margin-bottom: 20px;
 }
 
@@ -84,3 +83,23 @@ body {
     font-size: 14px;
     margin-bottom: 10px;
 }
+
+.flash-container {
+    position: relative;
+}
+
+.flash {
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+    background: #333;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    opacity: 0.95;
+}
+
+.flash.success { background-color: #28a745; }  /* green */
+.flash.error   { background-color: #dc3545; }  /* red */
+.flash.info    { background-color: #17a2b8; }  /* blue */
+.flash.warning { background-color: #ffc107; color: #333; } /* yellow */

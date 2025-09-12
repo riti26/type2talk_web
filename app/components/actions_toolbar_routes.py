@@ -4,6 +4,8 @@ from werkzeug.utils import secure_filename
 from app.models.card_items import CardItem
 from db.category_dao import CategoryDAO
 from db.item_dao import ItemDAO
+from app.decorators import login_required
+from app.main.services import get_user_id
 
 actions_toolbar_bp = Blueprint("actions_toolbar", __name__, url_prefix="/actions_toolbar")
 
@@ -141,6 +143,7 @@ def edit_selected():
 
 # ---------------- Add new category ----------------
 @actions_toolbar_bp.route("/add_item", methods=["POST"])
+@login_required
 def add_item():
     name = request.form.get("name")
     description = request.form.get("description")
@@ -164,7 +167,7 @@ def add_item():
         # ---------------- Create category ----------------
         category = CategoryDAO.add(
             name=name,
-            user_id=session.get("user_id"),
+            user_id=get_user_id(),
             icon_path=icon_path,
             description=description,
             is_standalone=is_standalone

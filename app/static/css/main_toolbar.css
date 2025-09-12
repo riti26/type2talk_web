@@ -128,6 +128,19 @@
     color: #1e88e5;
 }
 
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* space between icon and text */
+    cursor: pointer;
+    padding: 8px 12px;
+}
+
+.menu-item i {
+    min-width: 20px; /* keeps icons aligned */
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .nav-title {

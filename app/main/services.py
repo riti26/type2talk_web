@@ -16,4 +16,4 @@ def get_communication_item(category_id):
 def get_user_id():
     token = AppDataManager.load_session()
     user_info = UserSessionDAO.get_user_info(token)
-    return user_info["user_id"] if user_info else None
+    return user_info.user_id if user_info else None
