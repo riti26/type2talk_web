@@ -37,10 +37,6 @@
             <!-- Login button -->
             {{ form.submit(class="btn primary") }}
         </form>
-
-        <!-- Skip button -->
-        <a href="{{ url_for('main.home') }}" class="btn secondary">Skip</a>
-
         <!-- Forgot password -->
         <p><a href="{{ url_for('auth.forgot_password') }}" class="link">Forgot Password?</a></p>
 

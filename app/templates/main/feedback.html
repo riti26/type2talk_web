@@ -1,0 +1,68 @@
+{% extends "layouts/base_logged_in.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main_toolbar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/feedback.css')}}">
+{% endblock %}
+
+{% block content %}
+
+<nav class="nav-bar">
+  <div class="nav-title">Feedback</div>
+  <!-- Show back button on all other routes -->
+  <a class="menu-btn" href="{{ url_for('main.home') }}">
+    <span><i class="fa fa-arrow-circle-left"></i></span>
+  </a>
+</nav>
+<div class="feedback-container">
+  <div class="modal-content">
+    <h2>We’d love your feedback!</h2>
+    <p>How has your experience been so far?</p>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Feedback form -->
+    <form method="POST" action="{{ url_for('main.submit_feedback') }}">
+      <!-- Star rating -->
+      <div class="star-rating">
+        <label>
+          <input type="radio" name="rating" value="1" hidden>
+          <span data-value="1">&#9733;</span>
+        </label>
+        <label>
+          <input type="radio" name="rating" value="2" hidden>
+          <span data-value="2">&#9733;</span>
+        </label>
+        <label>
+          <input type="radio" name="rating" value="3" hidden>
+          <span data-value="3">&#9733;</span>
+        </label>
+        <label>
+          <input type="radio" name="rating" value="4" hidden>
+          <span data-value="4">&#9733;</span>
+        </label>
+        <label>
+          <input type="radio" name="rating" value="5" hidden>
+          <span data-value="5">&#9733;</span>
+        </label>
+      </div>
+
+      <!-- Text feedback -->
+      <textarea id="feedbackText" name="feedback" placeholder="Write your feedback here..." rows="4"></textarea>
+      <br>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+</div>
+
+{% endblock %}

@@ -8,6 +8,7 @@ import { renderPhraseToolbar, initPhraseToolbar } from "./phrase_toolbar.js";
 import { initMainToolbar } from "./main_toolbar.js";
 import { initLanguage } from "./language.js";
 import { initProfile } from "./profile.js";
+import { initFeedback } from "./feedback.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     initActionsToolbar();
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initMainToolbar();
     initLanguage();
     initProfile();
+    initFeedback();
     const loader = document.getElementById("loader");
     if(loader) {
         loader.style.display = "none"; // Hide loader once content is loaded

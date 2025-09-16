@@ -3,6 +3,7 @@ from flask import Blueprint, flash, jsonify, redirect, render_template, session,
 from app.decorators import login_required, no_cache
 from app.main.services import get_communication_item, get_category_data, get_user_id
 from app.models.card_items import CardItem
+from db.feedback_dao import FeedbackDAO
 from db.language_dao import LanguageDAO
 from db.user_dao import UserDAO
 from db.user_session_dao import UserSessionDAO
@@ -158,3 +159,19 @@ def delete_profile():
                 return redirect(url_for("auth.login"))
     flash("Unable to delete profile.", "danger")
     return redirect(url_for("main.profile"))
+
+@main_bp.route("/feedback", methods=["GET"])
+@login_required
+def feedback():
+    return render_template("main/feedback.html")
+
+@main_bp.route("/submit_feedback", methods=["POST"])
+@login_required
+def submit_feedback():
+    rating = request.form.get("rating")
+    feedback = request.form.get("feedback")
+    if rating and feedback:
+        feedback_id = FeedbackDAO.add_feedback(rating=rating, feedback=feedback)
+        if feedback_id:
+            flash("Feedback submited! Thank you for your time!", "success")
+    return redirect(url_for("main.feedback"))

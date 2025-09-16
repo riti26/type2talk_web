@@ -67,5 +67,15 @@ def init_db():
         )
     """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS feedback (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            rating INTEGER,          -- 1-5 star rating
+            feedback TEXT,           -- optional text feedback
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    """)
+
+
     conn.commit()
     conn.close()
