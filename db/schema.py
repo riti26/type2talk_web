@@ -18,6 +18,7 @@ def init_db():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS communication_category (
             category_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+            parent_category_id  INTEGER,
             text          TEXT NOT NULL,
             user_id       INTEGER,
             icon_path     TEXT,
@@ -71,7 +72,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS feedback (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             rating INTEGER,          -- 1-5 star rating
-            feedback TEXT,           -- optional text feedback
+            text TEXT,           -- optional text feedback
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     """)

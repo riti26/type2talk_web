@@ -5,7 +5,7 @@ from db.connection import get_connection
 class ItemDAO:
 
     @staticmethod
-    def add(category_id, text, icon_path=None):
+    def addV2(category_id, text, icon_path=None):
         text = translate_to_english_sync(text)
         conn = get_connection()
         cursor = conn.cursor()
@@ -22,6 +22,55 @@ class ItemDAO:
             FROM communication_item
             WHERE item_id = ?
         """, (item_id,))
+        row = cursor.fetchone()
+        conn.close()
+
+        if row:
+            return CommunicationItem(
+                item_id=row[0],
+                category_id=row[1],
+                text=row[2],
+                icon_path=row[3]
+            )
+        return None
+    
+    @staticmethod
+    def add(category_id: int, text: str, icon_path: str = None):
+        text = translate_to_english_sync(text)
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        # 1. Insert item into the selected category
+        cursor.execute("""
+            INSERT INTO communication_item (category_id, text, icon_path)
+            VALUES (?, ?, ?)
+        """, (category_id, text, icon_path))
+        admin_item_id = cursor.lastrowid
+
+        # 2. Check if this category is an admin category
+        cursor.execute("SELECT user_id FROM communication_category WHERE category_id = ?", (category_id,))
+        row = cursor.fetchone()
+        if row and row["user_id"] == None:  # admin
+            # Find all user categories linked to this admin category
+            cursor.execute("""
+                SELECT category_id FROM communication_category
+                WHERE parent_category_id = ?
+            """, (category_id,))
+            user_categories = cursor.fetchall()
+
+            # Duplicate the item into each user category
+            for uc in user_categories:
+                cursor.execute("""
+                    INSERT INTO communication_item (category_id, text, icon_path)
+                    VALUES (?, ?, ?)
+                """, (uc["category_id"], text, icon_path))
+        conn.commit()
+
+        cursor.execute("""
+            SELECT item_id, category_id, text, icon_path
+            FROM communication_item
+            WHERE item_id = ?
+        """, (admin_item_id,))
         row = cursor.fetchone()
         conn.close()
 

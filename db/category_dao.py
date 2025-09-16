@@ -9,14 +9,30 @@ class CategoryDAO:
         text = translate_to_english_sync(text)
         conn = get_connection()
         cursor = conn.cursor()
+        parent_category_id = None
+
+        # 1. Insert the base category
         cursor.execute("""
-            INSERT INTO communication_category (text, user_id, icon_path, is_standalone)
-            VALUES (?, ?, ?, ?)
-        """, (text, user_id, icon_path, int(is_standalone)))
-
+            INSERT INTO communication_category (text, user_id, icon_path, is_standalone, parent_category_id)
+            VALUES (?, ?, ?, ?, ?)
+        """, (text, None if user_id == 1 else user_id, icon_path, int(is_standalone), parent_category_id))
+        
         category_id = cursor.lastrowid
-        conn.commit()
 
+        # 2. If user_id == 1, replicate this category for all other users
+        if user_id == 1:
+            parent_category_id = category_id
+            cursor.execute("SELECT user_id FROM users WHERE user_id != 1")
+            other_users = cursor.fetchall()
+
+            for u in other_users:
+                cursor.execute("""
+                    INSERT INTO communication_category (text, user_id, icon_path, is_standalone, parent_category_id)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (text, u["user_id"], icon_path, int(is_standalone), parent_category_id))
+
+        conn.commit()
+        # 3. Fetch the newly created category for the original user
         cursor.execute("""
             SELECT category_id, text, user_id, icon_path, is_standalone
             FROM communication_category
@@ -39,10 +55,18 @@ class CategoryDAO:
     def get_all(user_id: int):
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("""
-            SELECT * FROM communication_category
-            WHERE user_id = ?
-        """, (user_id,))
+        if user_id == 1:
+        # Admin (or special user) gets all categories including defaults
+            cursor.execute("""
+                SELECT * FROM communication_category
+                WHERE user_id = ? OR user_id IS NULL
+            """, (user_id,))
+        else:
+            # Normal users only get their own
+            cursor.execute("""
+                SELECT * FROM communication_category
+                WHERE user_id = ?
+            """, (user_id,))
         rows = cursor.fetchall()
         conn.close()
 

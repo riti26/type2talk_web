@@ -1,0 +1,62 @@
+{% extends "layouts/base_logged_in.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main_toolbar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/feedback.css')}}">
+{% endblock %}
+
+{% block content %}
+
+<nav class="nav-bar">
+  <div class="nav-title">Feedback</div>
+  <!-- Show back button on all other routes -->
+  <a class="menu-btn" href="{{ url_for('main.home') }}">
+    <span><i class="fa fa-arrow-circle-left"></i></span>
+  </a>
+</nav>
+<div class="view-feedback-container">
+  <form class="filter-form" method="get" action="{{ url_for('main.feedback') }}">
+    <label for="rating">Filter by rating:</label>
+    <select name="rating" id="rating">
+      <option value="">All</option>
+      {% for r in range(1, 6) %}
+      <option value="{{ r }}" {% if rating_filter|int==r %}selected{% endif %}>{{ r }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="sort_by">Sort by:</label>
+    <select name="sort_by" id="sort_by">
+      <option value="created_at" {% if sort_by=='created_at' %}selected{% endif %}>Date</option>
+      <option value="rating" {% if sort_by=='rating' %}selected{% endif %}>Rating</option>
+    </select>
+
+    <select name="order" id="order">
+      <option value="asc" {% if order=='asc' %}selected{% endif %}>Ascending</option>
+      <option value="desc" {% if order=='desc' %}selected{% endif %}>Descending</option>
+    </select>
+
+    <button type="submit">Apply</button>
+  </form>
+
+  <table id="feedbackTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th style="width: 57px;">Rating</th>
+        <th>Text</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for f in feedback_list %}
+      <tr>
+        <td>{{ f['created_at'] }}</td>
+        <td>{{ f['rating'] }}</td>
+        <td>{{ f['text'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+{% endblock %}

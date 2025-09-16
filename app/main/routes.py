@@ -163,6 +163,18 @@ def delete_profile():
 @main_bp.route("/feedback", methods=["GET"])
 @login_required
 def feedback():
+    user = get_user_id()
+    if user and user == 1:
+        rating_filter = request.args.get("rating")
+        sort_by = request.args.get("sort_by", "created_at")
+        order = request.args.get("order", "desc")
+
+        feedback_list = FeedbackDAO.get_feedback(rating=rating_filter, sort_by=sort_by, order=order)
+        return render_template("main/view_feedback.html",
+                            feedback_list=feedback_list,
+                            rating_filter=rating_filter,
+                            sort_by=sort_by,
+                            order=order)
     return render_template("main/feedback.html")
 
 @main_bp.route("/submit_feedback", methods=["POST"])
@@ -171,7 +183,7 @@ def submit_feedback():
     rating = request.form.get("rating")
     feedback = request.form.get("feedback")
     if rating and feedback:
-        feedback_id = FeedbackDAO.add_feedback(rating=rating, feedback=feedback)
+        feedback_id = FeedbackDAO.add_feedback(rating=rating, text=feedback)
         if feedback_id:
             flash("Feedback submited! Thank you for your time!", "success")
     return redirect(url_for("main.feedback"))

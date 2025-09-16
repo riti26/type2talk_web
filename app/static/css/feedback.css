@@ -84,3 +84,86 @@ button:hover {
     font-size: 0.85rem;
     margin-top: 4px;
 }
+
+
+.view-feedback-container {
+  margin: 10px;
+}
+
+/* Filter form */
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-form label {
+    font-weight: bold;
+    margin-right: 5px;
+    align-self: center;
+}
+
+.filter-form select, form button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.filter-form button {
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.filter-form button:hover {
+    background-color: #0f5bb5;
+}
+
+/* Table */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+th {
+    background-color: #1976d2;
+    color: white;
+    cursor: pointer;
+    position: relative;
+}
+
+th:hover {
+    background-color: #0f5bb5;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #e0f0ff;
+}
+
+/* Optional: arrow indicator for sorting */
+th::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    border: 5px solid transparent;
+    border-top-color: white;
+    top: 50%;
+}
