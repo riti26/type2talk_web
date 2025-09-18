@@ -1,6 +1,4 @@
-import os
-from flask import Blueprint, jsonify, redirect, render_template, render_template_string, session, url_for, request, flash
-from werkzeug.utils import secure_filename
+from flask import Blueprint, jsonify, redirect, render_template, render_template_string, session, request, flash
 from app.models.card_items import CardItem
 from app.components.services import handle_file_upload
 from db.category_dao import CategoryDAO

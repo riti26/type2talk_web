@@ -1,7 +1,5 @@
 import os
 import time
-from werkzeug.utils import secure_filename
-
 
 def handle_file_upload(icon_file):
     filename = ""

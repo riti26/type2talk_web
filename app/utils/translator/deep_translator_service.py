@@ -1,7 +1,6 @@
 from deep_translator import GoogleTranslator
 from concurrent.futures import ThreadPoolExecutor
 import threading
-
 from app.utils.add_data_manager import AppDataManager
 
 # Thread-safe cache for translations

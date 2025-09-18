@@ -1,11 +1,9 @@
-from flask import Blueprint, make_response, render_template, redirect, url_for, flash
 from app.decorators import logged_out_required, no_cache
 from app.forms.auth_forms import ForgotPasswordForm, LoginForm, SignupForm
-from app.utils.add_data_manager import AppDataManager
 from app.utils.email.smtp_service import send_email
 from app.utils.password.password_generator import generate_random_password
 from db.user_dao import EmailExistsError, UserDAO, UsernameExistsError
-from db.user_session_dao import UserSessionDAO
+from flask import Blueprint, render_template, redirect, url_for, flash
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
