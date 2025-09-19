@@ -60,12 +60,14 @@ class CategoryDAO:
             cursor.execute("""
                 SELECT * FROM communication_category
                 WHERE user_id = ? OR user_id IS NULL
+                ORDER BY is_standalone DESC
             """, (user_id,))
         else:
             # Normal users only get their own
             cursor.execute("""
                 SELECT * FROM communication_category
                 WHERE user_id = ?
+                ORDER BY is_standalone DESC
             """, (user_id,))
         rows = cursor.fetchall()
         conn.close()
