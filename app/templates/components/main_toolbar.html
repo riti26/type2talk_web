@@ -4,7 +4,7 @@
 
 {% block content %}
 <nav class="nav-bar">
-    <div class="nav-title">Type2Talk</div>
+    <div class="nav-title">{{selected_category}}</div>
     {% if request.endpoint == 'main.home' %}
         <!-- Show hamburger ONLY on home -->
         <button class="menu-btn" id="main-menu" onClick="onMainMenuClick(this)">&#9776;</button>

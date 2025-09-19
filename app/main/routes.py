@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, jsonify, redirect, render_template, session, url_for, request
 
 from app.decorators import login_required, no_cache
-from app.main.services import get_communication_item, get_category_data, get_user_id
+from app.main.services import get_communication_items, get_category_data, get_user_id, set_selected_category
 from app.models.card_items import CardItem
 from db.feedback_dao import FeedbackDAO
 from db.language_dao import LanguageDAO
@@ -46,7 +46,8 @@ def home():# Reset toolbar on entering Home
 @login_required
 def communication_items(category_id):# Reset toolbar on entering Home
     session["toolbar_expanded"] = False
-    items = get_communication_item(category_id)
+    items = get_communication_items(category_id)
+    set_selected_category(category_id)
     cardData: list[CardItem] = []
 
     for item in items:
