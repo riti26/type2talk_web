@@ -24,7 +24,6 @@ class UserDAO:
         """
         username = username.strip().lower()
         email = email.strip().lower()
-
         try:
             with get_connection() as conn:
                 cursor = conn.cursor()
@@ -34,9 +33,9 @@ class UserDAO:
                     INSERT INTO users (username, email, password, language)
                     VALUES (?, ?, ?, 'en')
                 """, (username, email, encrypt_password(password)))
-                user_id = cursor.lastrowid   # <-- the new user id we must use
+                user_id = cursor.lastrowid   # <-- user i ri qe sapo u krijua
 
-                # 2) Fetch default categories (user_id IS NULL)
+                # 2) Merr kategorite default (user_id IS NULL)
                 cursor.execute("""
                     SELECT category_id, text, icon_path, is_standalone
                     FROM communication_category
@@ -44,23 +43,21 @@ class UserDAO:
                 """)
                 default_categories = cursor.fetchall()
 
-                # 3) For each default category: insert copy for this user,
-                #    then immediately copy its items and map them to the new category id.
+                # 3) Per cdo category: shto nje kopje per user e ri,
+                #    kopjo items dhe mapoji me kategorine e re.
                 for cat in default_categories:
                     old_cat_id = cat[0]
                     text = cat[1]
                     icon_path = cat[2]
                     is_standalone = cat[3]
 
-                    # insert category copy for this user
                     cursor.execute("""
                         INSERT INTO communication_category (text, user_id, icon_path, is_standalone)
                         VALUES (?, ?, ?, ?)
                     """, (text, user_id, icon_path, is_standalone))
                     new_cat_id = cursor.lastrowid
 
-                    # copy items for this specific default category (old_cat_id -> new_cat_id)
-                    # adjust selected columns if communication_item has more fields
+                    # per keto kategori te reja shto kopje te items default 
                     cursor.execute("""
                         SELECT category_id, text, icon_path
                         FROM communication_item

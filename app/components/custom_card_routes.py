@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, send_file
+from flask import Blueprint, request, send_file
 
 from app.utils.tts.gtts_service import play_text
 
