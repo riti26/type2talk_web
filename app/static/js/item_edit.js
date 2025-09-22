@@ -3,6 +3,7 @@ import { selectedCards } from "./actions_toolbar.js";
 import { updateActionsToolbarIcon, getScreenName } from "./utils.js";
 
 export function initEdit() {
+    const title = document.getElementById("edit-popup-title");
     const editForm = document.getElementById("edit-form");
     const editPopup = document.getElementById("edit-popup");
     const editNameInput = document.getElementById("edit-name");
@@ -15,6 +16,13 @@ export function initEdit() {
         editBtn.addEventListener("click", function (e) {
             e.preventDefault(); // stop form submission
             if (selectedCards.size !== 1) return;
+            screen = getScreenName(); 
+            if(screen == "home"){
+                title.textContent = "Edit Category";
+            } 
+            else if (screen == "communication-items"){
+                title.textContent = "Edit Item";
+            }
 
             const categoryId = Array.from(selectedCards)[0];
             const card = document.querySelector(`.custom-card[data-id="${categoryId}"]`);

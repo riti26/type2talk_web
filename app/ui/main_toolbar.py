@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, request
 from app.ui.common_service import get_menus
 from app.main.services import get_selected_category
 
@@ -7,8 +7,10 @@ class MainToolbar:
         self.root_menus = get_menus()
         # Convert every Menu object to a dict immediately
         self.menu_structure = [m.to_dict() for m in self.root_menus]
-
-        self.selected_category = get_selected_category()
+        if request and request.endpoint != 'main.home':
+            self.selected_category = get_selected_category()
+        else:
+            self.selected_category = "Type2Talk"
 
     def render(self):
         return render_template(

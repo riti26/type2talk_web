@@ -1,7 +1,8 @@
+import threading
 from flask import Blueprint, flash, jsonify, redirect, render_template, session, url_for, request
 
 from app.decorators import login_required, no_cache
-from app.main.services import get_communication_items, get_category_data, get_user_id, set_selected_category
+from app.main.services import get_communication_items, get_category_data, get_user_id, set_selected_category, translate_all_data
 from app.models.card_items import CardItem
 from db.feedback_dao import FeedbackDAO
 from db.language_dao import LanguageDAO
@@ -99,8 +100,14 @@ def select_language():
 
     # Save the selected language in session
     AppDataManager.save_language(language_code)
+    # Start background thread to fetch categories
+    translated = translate_all_data(language_code)
 
-    return jsonify({"success": True, "message": f"Language {language_code} selected"})
+    return jsonify({
+        "success": True,
+        "message": f"Language {language_code} selected",
+        "translation_done": translated  # always True after processing
+    })
 
 @main_bp.route("/change-password", methods=["GET", "POST"])
 @login_required
