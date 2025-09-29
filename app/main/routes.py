@@ -9,7 +9,7 @@ from db.language_dao import LanguageDAO
 from db.user_dao import UserDAO
 from db.user_session_dao import UserSessionDAO
 from app.utils.add_data_manager import AppDataManager
-from app.utils.translator.deep_translator_service import _translate_sync
+from app.utils.translator.deep_translator_service import _translate_sync, translate_phrase
 from app.forms.main_forms import ChangePasswordForm
 from app.models.user import User
 
@@ -94,6 +94,8 @@ def logout():
 def select_language():
     data = request.get_json()
     language_code = data.get("code")
+    phrase_data = data.get("phrase_data")
+    source_lang = AppDataManager.get_language()
     
     if not language_code:
         return jsonify({"success": False, "message": "No language code provided"}), 400
@@ -103,9 +105,19 @@ def select_language():
     # Start background thread to fetch categories
     translated = translate_all_data(language_code)
 
+    if phrase_data and len(phrase_data) > 0:
+        for item in phrase_data:
+            translated_text = translate_phrase(  # <-- use sync translation
+                item.get("text"),
+                language_code,
+                source_lang
+            )
+            item["text"] = translated_text
+
     return jsonify({
         "success": True,
         "message": f"Language {language_code} selected",
+        "translated_phrase": phrase_data,
         "translation_done": translated  # always True after processing
     })
 

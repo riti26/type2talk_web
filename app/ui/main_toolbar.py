@@ -7,7 +7,7 @@ class MainToolbar:
         self.root_menus = get_menus()
         # Convert every Menu object to a dict immediately
         self.menu_structure = [m.to_dict() for m in self.root_menus]
-        if request and request.endpoint != 'main.home':
+        if request and request.endpoint == 'main.communication_items':
             self.selected_category = get_selected_category()
         else:
             self.selected_category = "Type2Talk"

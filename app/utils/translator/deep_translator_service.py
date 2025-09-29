@@ -29,6 +29,36 @@ def _translate_sync(text, target_lang="en"):
         return translated
     except Exception as e:
         return f"Error: {e}"
+    
+def translate_phrase(text, target_lang="en", source_lang="auto"):
+    if not text:
+        return text
+    
+    short_map = {
+        "sq": {"Po": "Yes", "Jo": "No"},
+        "en": {"Yes": "Po", "No": "Jo"}
+    }
+    # kontrollo nëse është fjalë e shkurtër
+    if text in short_map.get("sq", {}):
+        return short_map["sq"][text]
+    
+    try:
+        # Check cache first
+        key = (text, target_lang)
+        with _cache_lock:
+            if key in _translation_cache:
+                return _translation_cache[key]
+
+        # If not cached, do translation
+        translated = GoogleTranslator(source=source_lang, target=target_lang).translate(text)
+
+        # Cache result
+        with _cache_lock:
+            _translation_cache[key] = translated
+
+        return translated
+    except Exception as e:
+        return f"Error: {e}"
 
 def translate_text_async(text, target_lang="en", callback=None):
     """
