@@ -4,31 +4,21 @@ from db.connection import get_connection
 class FeedbackDAO:
     @staticmethod
     def add_feedback(rating: int = None, text: str = None):
+        """
+        Insert new feedback into the database.
+
+        :param rating: Rating value (e.g., 1-5)
+        :param text: Feedback text
+        :return: ID of the inserted feedback
+        """
         conn = get_connection()
         cursor = conn.cursor()
-        # Insert the feedback
         cursor.execute(
             "INSERT INTO feedback (rating, text) VALUES (?, ?)",
             (rating, text)
         )
         conn.commit()
         feedback_id = cursor.lastrowid  # get the inserted ID
-        conn.close()
-        return feedback_id
-    
-    from db.connection import get_connection
-
-class FeedbackDAO:
-    @staticmethod
-    def add_feedback(rating: int = None, feedback: str = None):
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO feedback (rating, feedback) VALUES (?, ?)",
-            (rating, feedback)
-        )
-        conn.commit()
-        feedback_id = cursor.lastrowid
         conn.close()
         return feedback_id
 
@@ -57,7 +47,7 @@ class FeedbackDAO:
         query += f" ORDER BY {sort_by} {order.upper()}"
 
         conn = get_connection()
-        conn.row_factory = sqlite3.Row  # so we can access columns by name
+        conn.row_factory = sqlite3.Row  # access columns by name
         cursor = conn.cursor()
         cursor.execute(query, params)
         rows = cursor.fetchall()
