@@ -9,7 +9,12 @@
 {% import "components/custom_card.html" as custom_card %}
 
 {% block content %}
-<section class="cards-grid">
+<section class="page-heading">
+    <p class="eyebrow">COMMUNICATION BOARD</p>
+    <h1>Choose a topic</h1>
+    <p>Tap a card to start building a phrase.</p>
+</section>
+<section class="cards-grid" aria-label="Communication categories">
     {% for category in cardData %}
         {{ custom_card.render_card(category) }}
     {% endfor %}

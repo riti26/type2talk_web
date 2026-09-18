@@ -6,7 +6,10 @@
 {% block content %}
 <div class="background">
     <div class="card">
+        <div class="brand-mark"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Type2Talk"></div>
+        <p class="eyebrow">WELCOME BACK</p>
         <h2 class="title">Log In</h2>
+        <p class="subtitle">Your words, your way.</p>
         <!-- Login Form -->
         <form method="POST">
             {{ form.hidden_tag() }}
@@ -37,9 +40,9 @@
             {{ form.submit(class="btn primary") }}
         </form>
         <!-- Forgot password -->
-        <p><a href="{{ url_for('auth.forgot_password') }}" class="link">Forgot Password?</a></p>
+        <p class="account-link"><a href="{{ url_for('auth.forgot_password') }}" class="link">Forgot password?</a></p>
         <!-- Register link -->
-        <p><a href="{{ url_for('auth.signup') }}" class="link">No account? Register here</a></p>
+        <p class="account-link">New to Type2Talk? <a href="{{ url_for('auth.signup') }}" class="link">Create an account</a></p>
     </div>
 </div>
 {% endblock %}

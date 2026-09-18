@@ -6,6 +6,7 @@
             data-item='{{ item.to_dict() | tojson | safe }}'
             data-url="{{ url_for('custom_card.card_click') }}"
             onclick="handleCardClick(this, event)">
+            <span class="card-sparkle" aria-hidden="true">✦</span>
             <div class="card-image">
                 <img src="{{ url_for('static', filename=item.image_source or 'images/default.png') }}"
                      alt="{{ item.text }}">
@@ -21,6 +22,7 @@
            data-item='{{ item.to_dict() | tojson | safe }}'
            data-url="{{ url_for(route_name, category_id=item.id) }}"
            onclick="handleCardClick(this, event)">
+            <span class="card-sparkle" aria-hidden="true">✦</span>
             <div class="card-image">
                 <img src="{{ url_for('static', filename=item.image_source or 'images/default.png') }}"
                      alt="{{ item.text }}">

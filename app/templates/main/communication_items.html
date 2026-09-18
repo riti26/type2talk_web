@@ -9,7 +9,10 @@
 {% import "components/custom_card.html" as custom_card %}
 
 {% block content %}
-<section class="cards-grid">
+<section class="page-heading compact">
+    <p>Choose a card to add it to your phrase.</p>
+</section>
+<section class="cards-grid" aria-label="Communication cards">
     {% for category in cardData %}
         {{ custom_card.render_card(category) }}
     {% endfor %}

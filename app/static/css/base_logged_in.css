@@ -1,5 +1,1 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f2f4f8;
-}
+body { background: var(--page); }#main-content { max-width: 1180px; margin: 0 auto; padding-bottom: 24px; }.loader-overlay { position: fixed; inset: 0; display: none; place-items: center; background: rgba(255,255,255,.78); z-index: 9999; }.spinner { width: 46px; height: 46px; border: 5px solid #dfe7fb; border-top-color: var(--primary); border-radius: 50%; animation: spin .8s linear infinite; }@keyframes spin { to { transform: rotate(360deg); } }
